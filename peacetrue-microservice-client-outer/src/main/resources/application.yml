@@ -74,5 +74,5 @@ spring.profiles: uaa
 
 authorization-server:
   port: 8080
-  issuerUri: http://${authorization-server.hostname}:${authorization-server.port}/uaa/oauth/token
-  jwkSetUri: http://${authorization-server.hostname}:${authorization-server.port}/uaa/token_keys
+  issuerUri: ${MICROSERVICE_PROTOCOL:http}://${authorization-server.hostname}:${authorization-server.port}/uaa/oauth/token
+  jwkSetUri: ${MICROSERVICE_PROTOCOL:http}://${authorization-server.hostname}:${authorization-server.port}/uaa/token_keys
