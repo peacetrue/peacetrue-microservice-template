@@ -29,8 +29,8 @@ spring:
 server.port: 8531
 
 gateway:
-  host: localhost
-  url: ${MICROSERVICE_PROTOCOL:http}://${gateway.host}
+  hostname: localhost
+  url: ${MICROSERVICE_PROTOCOL:http}://${gateway.hostname}
 
 spring.profiles.include: uaa
 management.endpoints.web.exposure.include: "*"
@@ -43,7 +43,7 @@ logging.level.com.github.peacetrue: debug
 spring.profiles: prod
 spring.profiles.include: https,log
 
-gateway.host: peacetrue.cn
+gateway.hostname: peacetrue.cn
 authorization-server.hostname: peacetrue.cn
 
 logging.level.org.springframework: info
