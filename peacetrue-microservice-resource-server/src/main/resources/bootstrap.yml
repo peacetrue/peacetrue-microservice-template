@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: peacetrue-microservice-resource-server
+  cloud:
+    config:
+      uri: ${MICROSERVICE_PROTOCOL:http}://${MICROSERVICE_SECURITY_USERNAME:peacetrue}:${MICROSERVICE_SECURITY_PASSWORD:password}@${MICROSERVICE_CONFIG_HOST:localhost}:${MICROSERVICE_CONFIG_PORT:8888}
+      fail-fast: true
+
+---
+
+spring.profiles: prod
+spring.profiles.include: https
+
+MICROSERVICE_CONFIG_HOST: peacetrue.cn
+
+---
+
+spring.profiles: https
+
+MICROSERVICE_PROTOCOL: https
+

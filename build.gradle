@@ -1,0 +1,58 @@
+buildscript {
+    repositories {
+        maven { url 'https://repo.spring.io/plugins-release' }
+    }
+
+    dependencies {
+        //自动使用最新版本
+        classpath "io.spring.gradle:dependency-management-plugin:1+"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2+"
+    }
+}
+
+subprojects { project ->
+
+    group "com.github.peacetrue.microservice"
+    version "1.0.0-SNAPSHOT"
+    description "微服务结构"
+
+    apply plugin: "java-library"
+    sourceCompatibility = 9
+    targetCompatibility = 9
+
+    repositories {
+        mavenLocal()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://repo.spring.io/plugins-release" }
+        mavenCentral()
+    }
+
+    apply plugin: 'org.springframework.boot'
+    apply plugin: "io.spring.dependency-management"
+    dependencyManagement {
+        imports {
+            //自动使用最新版本
+            mavenBom "com.github.peacetrue:peacetrue-dependencies:2+"
+        }
+    }
+
+    dependencies {
+        compileOnly "org.projectlombok:lombok"
+        annotationProcessor "org.projectlombok:lombok"
+        implementation("com.google.code.findbugs:jsr305")
+
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+        testCompileOnly "org.projectlombok:lombok"
+        testAnnotationProcessor "org.projectlombok:lombok"
+    }
+
+    //junit 5 测试
+    test {
+        useJUnitPlatform()
+    }
+}
+
+
+

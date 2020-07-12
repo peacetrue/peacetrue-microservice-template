@@ -1,0 +1,63 @@
+spring:
+  application:
+    #应用名
+    name: peacetrue-microservice-config-center
+  security:
+    #访问配置中心的用户账号和密码
+    user:
+      name: ${MICROSERVICE_SECURITY_USERNAME:peacetrue}
+      password: ${MICROSERVICE_SECURITY_PASSWORD:password}
+
+server.port: ${MICROSERVICE_CONFIG_PORT:8888}
+management.endpoints.web.exposure.include: "*"
+
+logging.level.org.springframework: debug
+logging.level.com.github.peacetrue: debug
+
+---
+#生产环境
+spring.profiles: '!prod'
+#使用本地文件需要包含 native
+spring.profiles.include: native
+spring:
+  cloud:
+    config:
+      server:
+        native:
+          #直接使用本地文件，避免检出 github 仓库
+          searchLocations: file:../peacetrue-microservice-config-repo-template
+---
+#生产环境
+spring.profiles: prod
+#默认激活 https 和 log
+spring.profiles.include: https,log
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          #远程资源库地址
+          uri: https://github.com/peacetrue/peacetrue-microservice-config-repo-template
+          #如果是私有仓库需要提供用户名和密码
+          username: '${MICROSERVICE_REPO_USERNAME:peacetrue}'
+          password: '${MICROSERVICE_REPO_PASSWORD:password}'
+
+logging.level.org.springframework: info
+logging.level.com.github.peacetrue: info
+
+---
+#默认 http 协议，激活此配置切换到 https 协议
+spring.profiles: https
+
+server:
+  ssl:
+    key-store: file://${user.home}/peacetrue.cn.jks
+    key-alias: peacetrue.cn
+    key-store-password: ${MICROSERVICE_SSL_PASSWORD:password}
+
+---
+#默认输出到控制台，激活此配置切换到文件
+spring.profiles: log
+
+logging.file.name: logs/root.log

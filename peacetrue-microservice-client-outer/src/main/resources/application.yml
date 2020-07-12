@@ -1,0 +1,77 @@
+#授权服务配置（spring-security-oauth2 过期不完善的）
+authorization-server:
+  hostname: localhost
+  port: 8510
+  issuerUri: ${MICROSERVICE_PROTOCOL:http}://${authorization-server.hostname}:${authorization-server.port}
+  jwkSetUri: ${authorization-server.issuerUri}/.well-known/jwks.json
+
+spring:
+  application:
+    name: peacetrue-microservice-client-outer
+  security:
+    oauth2:
+      client:
+        registration:
+          peacetrue:
+            provider: peacetrue
+            client-id: peacetrue
+            client-secret: password
+            scope: message.read,message.write
+            authorizationGrantType: client_credentials
+        provider:
+          peacetrue:
+            issuerUri: ${authorization-server.issuerUri}
+            jwkSetUri: ${authorization-server.jwkSetUri}
+    user:
+      name: ${MICROSERVICE_SECURITY_USERNAME:peacetrue}
+      password: ${MICROSERVICE_SECURITY_PASSWORD:password}
+
+server.port: 8531
+
+gateway:
+  host: localhost
+  url: ${MICROSERVICE_PROTOCOL:http}://${gateway.host}
+
+spring.profiles.include: uaa
+management.endpoints.web.exposure.include: "*"
+
+logging.level.org.springframework: debug
+logging.level.com.github.peacetrue: debug
+
+---
+
+spring.profiles: prod
+spring.profiles.include: https,log
+
+gateway.host: peacetrue.cn
+
+logging.level.org.springframework: info
+logging.level.com.github.peacetrue: info
+
+---
+
+spring.profiles: https
+
+MICROSERVICE_PROTOCOL: https
+
+server:
+  ssl:
+    #服务端
+    key-store: file://${user.home}/peacetrue.cn.jks
+    key-alias: peacetrue.cn
+    key-store-password: ${MICROSERVICE_SSL_PASSWORD:password}
+
+---
+
+spring.profiles: log
+
+logging.file.name: logs/root.log
+
+---
+#授权服务配置（UAA 完善的），默认使用 spring-security-oauth2，激活此配置使用 UAA
+spring.profiles: uaa
+
+authorization-server:
+  port: 8080
+  issuerUri: http://${authorization-server.hostname}:${authorization-server.port}/uaa/oauth/token
+  jwkSetUri: http://${authorization-server.hostname}:${authorization-server.port}/uaa/token_keys

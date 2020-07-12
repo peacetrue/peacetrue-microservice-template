@@ -1,0 +1,5 @@
+= 安宁微服务
+安宁 <xiayouxue@hotmail.com>
+v1.0, 2020-07-11: SNAPSHOT
+
+详情参考 https://peacetrue.cn/summarize/peacetrue-microservice-template/index.html[安宁的博客^]。

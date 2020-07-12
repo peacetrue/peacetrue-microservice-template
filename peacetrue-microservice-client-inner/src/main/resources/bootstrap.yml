@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: peacetrue-microservice-client-inner
+  cloud:
+    config:
+      uri: ${MICROSERVICE_PROTOCOL:http}://${MICROSERVICE_SECURITY_USERNAME:peacetrue}:${MICROSERVICE_SECURITY_PASSWORD:password}@${MICROSERVICE_CONFIG_HOST:localhost}:${MICROSERVICE_CONFIG_PORT:8888}
+      fail-fast: true
+  security:
+    oauth2:
+      client:
+        registration:
+          peacetrue:
+            client-id: peacetrue
+            client-secret: password
+            #TODO 如果设置多种类型，如何选择哪一种
+            authorization-grant-type: authorization_code
+            scope: openid,message.read,message.write
+
+---
+
+spring.profiles: prod
+spring.profiles.include: https
+
+MICROSERVICE_CONFIG_HOST: peacetrue.cn
+
+---
+
+spring.profiles: https
+
+MICROSERVICE_PROTOCOL: https

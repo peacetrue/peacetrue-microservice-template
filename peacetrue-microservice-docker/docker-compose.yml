@@ -1,0 +1,108 @@
+version: '2'
+
+networks:
+  peacetrue-microservice:
+    external:
+      name: peacetrue-microservice
+
+services:
+  peacetrue-microservice-config-center:
+    container_name: peacetrue-microservice-config-center
+    hostname: peacetrue-microservice-config-center
+#    build: peacetrue-microservice-config-center
+    image: peacetrueopenjdk:latest
+    restart: always
+    privileged: true
+    volumes:
+      - ../peacetrue-microservice-config-center/build/libs/peacetrue-microservice-config-center-1.0.0-SNAPSHOT.jar:/app.jar
+      - ./peacetrue-microservice-config-center/logs:/logs
+      - ${volumes_ssl}
+      - ${volumes_localtime}
+      - ${volumes_timezone}
+    expose:
+      - 8888
+    ports:
+      - "8888:8888"
+    env_file:
+      - .env
+    networks:
+      - peacetrue-microservice
+    entrypoint: java -jar app.jar ${JAR_ENV}
+  peacetrue-microservice-registry-center:
+    container_name: peacetrue-microservice-registry-center
+    hostname: peacetrue-microservice-registry-center
+#    build: peacetrue-microservice-registry-center
+    image: peacetrueopenjdk:latest
+    restart: always
+    privileged: true
+    volumes:
+      - ../peacetrue-microservice-registry-center/build/libs/peacetrue-microservice-registry-center-1.0.0-SNAPSHOT.jar:/app.jar
+      - ./peacetrue-microservice-registry-center/logs:/logs
+      - ${volumes_ssl}
+      - ${volumes_localtime}
+      - ${volumes_timezone}
+    expose:
+      - 8761
+    ports:
+      - "8761:8761"
+    env_file:
+      - .env
+    networks:
+      - peacetrue-microservice
+    entrypoint: java -jar app.jar ${JAR_ENV}
+    depends_on:
+      - peacetrue-microservice-config-center
+  peacetrue-microservice-gateway:
+    container_name: peacetrue-microservice-gateway
+    hostname: peacetrue-microservice-gateway
+#    build: peacetrue-microservice-gateway
+    image: peacetrueopenjdk:latest
+    restart: always
+    privileged: true
+    volumes:
+      - ../peacetrue-microservice-gateway/build/libs/peacetrue-microservice-gateway-1.0.0-SNAPSHOT.jar:/app.jar
+      - ./peacetrue-microservice-gateway/logs:/logs
+      - ${volumes_ssl}
+      - ${volumes_localtime}
+      - ${volumes_timezone}
+    expose:
+      - 8500
+    ports:
+      - "8500:8500"
+    env_file:
+      - .env
+    networks:
+      - peacetrue-microservice
+    entrypoint: java -jar app.jar ${JAR_ENV}
+    depends_on:
+      - peacetrue-microservice-config-center
+      - peacetrue-microservice-registry-center
+  peacetrue-microservice-authorization-server:
+    container_name: peacetrue-microservice-authorization-server
+    hostname: peacetrue-microservice-authorization-server
+#    build: peacetrue-microservice-authorization-server
+    image: peacetrueopenjdk:latest
+    restart: always
+    privileged: true
+    volumes:
+      - ../peacetrue-microservice-authorization-server/build/libs/peacetrue-microservice-authorization-server-1.0.0-SNAPSHOT.jar:/app.jar
+      - ./peacetrue-microservice-authorization-server/logs:/logs
+      - ${volumes_ssl}
+      - ${volumes_localtime}
+      - ${volumes_timezone}
+    expose:
+      - 8510
+    ports:
+      - "8510:8510"
+    env_file:
+      - .env
+    networks:
+      - peacetrue-microservice
+    entrypoint: java -jar app.jar ${JAR_ENV}
+    depends_on:
+      - peacetrue-microservice-config-center
+      - peacetrue-microservice-registry-center
+# docker network create peacetrue-microservice
+# docker-compose up --build -d
+# docker-compose down
+# docker-compose run peacetrue-microservice-authorization-server
