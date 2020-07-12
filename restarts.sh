@@ -10,4 +10,4 @@ sleep 20s
 ./restart.sh peacetrue-microservice-resource-server 8520 "$env"
 ./restart.sh peacetrue-microservice-client-inner 8530 "$env"
 ./restart.sh peacetrue-microservice-gateway 443 "$env"
-./restart.sh peacetrue-microservice-client-outer 8532 "$env"
+./restart.sh peacetrue-microservice-client-outer 8531 "$env"
