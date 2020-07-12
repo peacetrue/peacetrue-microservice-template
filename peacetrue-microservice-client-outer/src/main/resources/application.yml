@@ -76,3 +76,9 @@ authorization-server:
   port: 8080
   issuerUri: ${MICROSERVICE_PROTOCOL:http}://${authorization-server.hostname}:${authorization-server.port}/uaa/oauth/token
   jwkSetUri: ${MICROSERVICE_PROTOCOL:http}://${authorization-server.hostname}:${authorization-server.port}/uaa/token_keys
+
+---
+#uaa https tomcat 默认 8443
+spring.profiles: uaa & https
+
+authorization-server.hostname: 8443
