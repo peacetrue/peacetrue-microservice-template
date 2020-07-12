@@ -35,7 +35,7 @@ spring_profiles: mysql
 
 database:
   driverClassName: org.mariadb.jdbc.Driver
-  url: jdbc:mysql://localhost:3307/uaa1
+  url: jdbc:mysql://localhost:3307/uaa
   username: root
   password: 12345678
 
