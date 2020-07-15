@@ -1,6 +1,6 @@
 = 项目介绍
 
-本文主要讲解如何实现 link:index.adoc[安宁微服务^]。
+本文主要介绍 link:index.adoc[安宁微服务^] 项目。
 
 == 项目地址
 
@@ -17,7 +17,7 @@
 
 == 项目模块
 
-http 和 https 端口默认是相同的，不同的会单独说明。
+http 和 https 端口默认是相同的，如果不同会单独说明。
 
 peacetrue-microservice-config-center::
 配置中心，监听在 8888 端口，关联 https://github.com/peacetrue/peacetrue-microservice-config-repo-template[peacetrue-microservice-config-repo-template^] 远程仓库。
@@ -26,11 +26,11 @@ peacetrue-microservice-registry-center::
 peacetrue-microservice-gateway::
 接口网关，监听在 80（http） / 443（https）端口，关联配置中心和注册中心。
 peacetrue-microservice-authorization-server::
-认证中心，监听在 8510 端口，关联配置中心和注册中心。认证中心基于已过期的 https://projects.spring.io/spring-security-oauth/docs/Home.html[Spring Security OAuth2^] 项目，新项目 https://github.com/spring-projects-experimental/spring-authorization-server[spring-authorization-server^] 正在开发中，预计在 8 月份发布第一个版本，届时会迁移。
+认证授权中心，监听在 8510 端口，关联配置中心和注册中心。此模块基于已过期的 https://projects.spring.io/spring-security-oauth/docs/Home.html[Spring Security OAuth2^] 项目，新项目 https://github.com/spring-projects-experimental/spring-authorization-server[spring-authorization-server^] 正在研发中，查看 https://app.zenhub.com/workspaces/authorization-server-5e8f3182b5e8f5841bfc4902/roadmap[最新进展^]，完成后会迁移。
 peacetrue-microservice-uaa::
-认证中心，监听在 8080（http） / 8443（https）端口。因为 peacetrue-microservice-authorization-server 不支持授权码认证流程，所以实际使用该认证中心。
+认证授权中心，监听在 8080（http） / 8443（https）端口。因为 peacetrue-microservice-authorization-server 不支持授权码认证流程，所以实际使用该模块。
 peacetrue-microservice-resource-server::
-资源服务，监听在 8520 端口，关联配置中心、注册中心和认证中心，提供基于 JWT 的 OAuth2 访问令牌验证。包含两个接口：
+资源服务，监听在 8520 端口，关联配置中心、注册中心和认证中心，提供基于 OAuth2 的访问令牌认证。包含两个接口：
 . `GET /message`：需要 *message.read* 或 *message.write* 权限
 . `POST /message`：需要 *message.write* 权限
 peacetrue-microservice-client-inner::
@@ -38,13 +38,13 @@ peacetrue-microservice-client-inner::
 peacetrue-microservice-client-outer::
 外部客户端，供第三方系统使用，监听在 8531 端口，关联接口网关和认证授权中心，提供基于 OAuth2 的客户端凭据认证。
 
-== 配置规划
+== 配置说明
 
 配置分为 2 部分：项目内配置和远程仓库配置。为了统一配置，尽可能使用远程仓库的配置。
 
-配置中心只能使用项目内配置，不能使用远程仓库配置。所有其他项目都使用远程仓库配置，项目内只保留最基本的配置，包括应用名和远程仓库地址。
+配置中心只能使用项目内配置，不能使用远程仓库配置。所有其他项目都使用远程仓库配置，项目内只保留最基本的配置，包括 *应用名* 和 *远程仓库地址*。
 
-目前设计两套环境：开发环境（default）和生产环境（prod）。另外，还有一些局部环境包括：协议、日志、docker。协议包括：http 和 https；日志包括：控制台和文件；docker 包括 docker 内和非 docker。开发环境默认使用 http 协议、控制台日志和非 docker；生产环境默认使用 https 协议、文件日志和非 docker。上线前，需要在本地模拟生产环境，可手动切换为 https 协议，验证无误后部署上线。
+目前设计两套环境：非生产环境（!prod）和生产环境（prod）。另外，还有一些局部环境包括：协议、日志、docker。协议包括：http 和 https；日志包括：控制台和文件；docker 包括 docker 内和非 docker。非生产环境默认使用 http 协议、控制台日志和非 docker；生产环境默认使用 https 协议、文件日志和非 docker。上线前，需要在本地模拟生产环境，可手动切换为 https 协议，验证无误后部署上线。
 
 docker 目前尚未实现，以下配置未实现 docker。
 
@@ -68,12 +68,14 @@ spring:
 server.port: ${MICROSERVICE_CONFIG_PORT:8888}
 management.endpoints.web.exposure.include: "*"
 
----
-#开发环境（默认环境）
-spring.profiles: default
-#使用本地文件存储配置需要激活 native
-spring.profiles.active: native
+logging.level.org.springframework: debug
+logging.level.com.github.peacetrue: debug
 
+---
+#非生产环境
+spring.profiles: '!prod'
+#使用本地文件需要包含 native
+spring.profiles.include: native
 spring:
   cloud:
     config:
@@ -82,14 +84,11 @@ spring:
           #直接使用本地文件，避免检出 github 仓库
           searchLocations: file:../peacetrue-microservice-config-repo-template
 
-logging.level.org.springframework: debug
-logging.level.com.github.peacetrue: debug
-
 ---
 #生产环境
 spring.profiles: prod
 #默认激活 https 和 log
-spring.profiles.active: https,log
+spring.profiles.include: https,log
 
 spring:
   cloud:
@@ -139,6 +138,7 @@ spring:
     config:
       #配置中心地址
       uri: ${MICROSERVICE_PROTOCOL:http}://${MICROSERVICE_SECURITY_USERNAME:peacetrue}:${MICROSERVICE_SECURITY_PASSWORD:password}@${MICROSERVICE_CONFIG_HOST:localhost}:${MICROSERVICE_CONFIG_PORT:8888}
+      label: master
       fail-fast: true
 
 ---
@@ -155,139 +155,35 @@ spring.profiles: https
 MICROSERVICE_PROTOCOL: https
 ----
 
-不同的应用，共用同一个远程仓库配置 `application.yml`，然后有一个自己单独的配置 `{应用名}.yml`，上例为：`peacetrue-microservice-app.yml`。
+不同的应用，共用同一个远程仓库配置 `application.yml`，然后有一个自己单独的配置 `{应用名}.yml`，上例为：`peacetrue-microservice-app.yml`。远程仓库配置目录结构如下：
 
-.远程仓库配置
-[source%nowrap,yml]
-----
-#授权服务配置（spring-security-oauth2 过期不完善的）
-authorization-server:
-  hostname: localhost
-  port: 8510
-  issuerUri: ${MICROSERVICE_PROTOCOL:http}://${authorization-server.hostname}:${authorization-server.port}
-  jwkSetUri: ${authorization-server.issuerUri}/.well-known/jwks.json
+.远程仓库配置目录结构
+image::项目简介/远程仓库配置目录结构.png[]
 
-#所有应用共用的账号
-spring:
-  security:
-    user:
-      name: ${MICROSERVICE_SECURITY_USERNAME:peacetrue}
-      password: ${MICROSERVICE_SECURITY_PASSWORD:password}
+具体配置内容请查看 https://github.com/peacetrue/peacetrue-microservice-config-repo-template[peacetrue-microservice-config-repo-template^]。
 
-#注册客户端配置
-eureka:
-  instance:
-    #优先使用 host 访问而非 ip 地址
-    hostname: localhost
-  client:
-    serviceUrl:
-      defaultZone: ${MICROSERVICE_PROTOCOL:http}://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:8761/eureka
+== 特殊变量
 
-management.endpoints.web.exposure.include: "*"
-
----
-#开发环境（默认环境）
-spring.profiles: default
-
-logging.level.org.springframework: debug
-logging.level.com.github.peacetrue: debug
-
----
-#生产环境
-spring.profiles: prod
-spring.profiles.include: https,log
-
-eureka.instance.hostname: peacetrue.cn
-
-db.hostname: peacetrue.cn
-
-logging.level.org.springframework: info
-logging.level.com.github.peacetrue: info
-
----
-#默认 http 协议，激活此配置切换到 https 协议
-spring.profiles: https
-
-MICROSERVICE_PROTOCOL: https
-
-server:
-  ssl:
-    #服务端
-    key-store: file://${user.home}/peacetrue.cn.jks
-    key-alias: peacetrue.cn
-    key-store-password: ${MICROSERVICE_SSL_PASSWORD:password}
-
-eureka.instance.securePortEnabled: true
-
----
-#默认输出到控制台，激活此配置切换到文件
-spring.profiles: log
-
-logging.file.name: logs/root.log
-
----
-#资源服务配置
-spring.profiles: resourceserver
-
-spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuerUri: ${authorization-server.issuerUri}
-          jwkSetUri: ${authorization-server.jwkSetUri}
-
----
-#认证客户端配置
-spring.profiles: authorizationclient
-
-spring:
-  security:
-    oauth2:
-      client:
-        provider:
-          peacetrue:
-            issuerUri: ${authorization-server.issuerUri}
-            jwkSetUri: ${authorization-server.jwkSetUri}
-        peacetrue:
-          provider: peacetrue
-          redirectUri: '{baseUrl}/login/oauth2/code/{registrationId}'
-
----
-#授权服务配置（UAA 完善的），默认使用 spring-security-oauth2，激活此配置使用 UAA
-spring.profiles: uaa
-
-authorization-server:
-  port: 8080
-  issuerUri: http://${authorization-server.hostname}:${authorization-server.port}/uaa/oauth/token
-  jwkSetUri: http://${authorization-server.hostname}:${authorization-server.port}/uaa/token_keys
-----
-
-== 初始配置
-
-系统中所有涉及到的用户名和密码都默认为：peacetrue / password。为了方便配置提供了一些特殊变量：
+系统中涉及到的所有用户名和密码都默认为：peacetrue/password。为了方便配置提供了一些特殊变量：
 
 * 配置中心变量：配置中心变量影响所有项目，所以提供一种统一配置方式
 * 账号密码变量：私密信息可以不暴露在配置文件中
 
-配置中心变量::
+配置中心信息::
 通过以下命令添加到系统环境：
 * 主机名：`export MICROSERVICE_CONFIG_HOST=localhost`
 * 端口：`export MICROSERVICE_CONFIG_PORT=8888`
 
 远程仓库账号::
 如果是私有仓库，需要提供账号密码，通过以下命令添加到系统环境：
-* export MICROSERVICE_REPO_USERNAME=peacetrue
-* export MICROSERVICE_REPO_PASSWORD=password
+* 用户名：`export MICROSERVICE_REPO_USERNAME=peacetrue`
+* 密码：`export MICROSERVICE_REPO_PASSWORD=password`
 
-安全认证账号::
+各个应用登陆账号::
 通过以下命令添加到系统环境：
-* export MICROSERVICE_SECURITY_USERNAME=peacetrue
-* export MICROSERVICE_SECURITY_PASSWORD=password
+* 用户名：`export MICROSERVICE_SECURITY_USERNAME=peacetrue`
+* 密码：`export MICROSERVICE_SECURITY_PASSWORD=password`
 
 SSL账号::
-* export MICROSERVICE_SSL_PASSWORD=password
-
-数据库::
-* export MICROSERVICE_DB_USERNAME=peacetrue
-* export MICROSERVICE_DB_PASSWORD=password
+通过以下命令添加到系统环境：
+* 私钥密码：`export MICROSERVICE_SSL_PASSWORD=password`

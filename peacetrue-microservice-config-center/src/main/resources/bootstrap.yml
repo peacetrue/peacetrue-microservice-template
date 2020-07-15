@@ -15,7 +15,7 @@ logging.level.org.springframework: debug
 logging.level.com.github.peacetrue: debug
 
 ---
-#生产环境
+#非生产环境
 spring.profiles: '!prod'
 #使用本地文件需要包含 native
 spring.profiles.include: native
@@ -26,6 +26,7 @@ spring:
         native:
           #直接使用本地文件，避免检出 github 仓库
           searchLocations: file:../peacetrue-microservice-config-repo-template
+
 ---
 #生产环境
 spring.profiles: prod
