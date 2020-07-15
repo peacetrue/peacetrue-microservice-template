@@ -16,10 +16,14 @@
 
 package com.github.peaceture.microservice;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -39,11 +43,18 @@ public class WebFluxSecurityConfig {
                                 .hasAuthority("SCOPE_message:write")
                                 .anyExchange().authenticated()
                 )
-                .formLogin()
-                .and()
-                .oauth2ResourceServer(oauth2ResourceServer ->
-                        oauth2ResourceServer.jwt(withDefaults())
-                );
+                .formLogin(withDefaults())
+                .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(withDefaults()));
         return http.build();
+    }
+
+    @Bean
+    public MapReactiveUserDetailsService userDetailsService(SecurityProperties properties) {
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username(properties.getUser().getName())
+                .password(properties.getUser().getPassword())
+                .roles(properties.getUser().getRoles().toArray(new String[0]))
+                .build();
+        return new MapReactiveUserDetailsService(user);
     }
 }
