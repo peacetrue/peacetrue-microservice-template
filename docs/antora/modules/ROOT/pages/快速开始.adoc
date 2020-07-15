@@ -2,9 +2,9 @@
 
 本文讲解如何在本地快速启动 link:index.adoc[安宁微服务^]。
 
-== 前置要求
+== 前提条件
 
-需要本地安装 jdk 9 及以上。
+需要本地安装 jdk 11 及以上。
 
 == 检出源码
 
@@ -30,17 +30,31 @@ image::快速开始/项目结构.png[]
 . peacetrue-microservice-config-center：8888
 . peacetrue-microservice-registry-center：8761
 . peacetrue-microservice-uaa：8080
-. peacetrue-microservice-resource-server：8510
+. peacetrue-microservice-resource-server：8520
 . peacetrue-microservice-client-inner：8530
-. peacetrue-microservice-gateway：8520
+. peacetrue-microservice-gateway：80
 . peacetrue-microservice-client-outer：8531
 
-peacetrue-microservice-uaa 需要部署到 tomcat 启动，其他模块都是从 *Application 类启动。如启动失败，请检查端口是否被占用。
+peacetrue-microservice-uaa 需要部署到 Tomcat 启动（参考 link:UAA安装部署.adoc[UAA安装部署^]），其他模块都是从 *Application 类启动。如启动失败，请检查端口是否被占用。
 
-== 查看应用
+== 查看应用状态
 
-== 认证码授权
+所有应用账号密码都是 peacetrue/password。
 
-== 客户端凭据
+依次打开各个应用，查看运行情况：
 
-== 后续集成
+* http://localhost:8888/actuator/health
+* http://localhost:8761/actuator/health
+* http://localhost:8080/uaa
+//* http://localhost:8520/actuator/health
+* http://localhost:8530/actuator/health
+* http://localhost/actuator/health
+* http://localhost:8531/actuator/health
+
+== 内部客户端-授权码认证流程
+
+参考 link:演示效果.adoc#client-inner[演示效果^]
+
+== 外部客户端-客户端凭据认证流程
+
+参考 link:演示效果.adoc#client-outer[演示效果^]

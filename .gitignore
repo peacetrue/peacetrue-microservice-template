@@ -51,3 +51,4 @@ docker.sh
 docker
 peacetrue-microservice-docker
 peacetrue-microservice-uaa/apache-tomcat-9.0.37*
+/peacetrue-microservice-uaa/uaa.war
