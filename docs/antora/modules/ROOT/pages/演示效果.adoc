@@ -1,20 +1,18 @@
 = 演示效果
 
-本项目已部署在网站 https://peaceture.cn 上，可直接查看演示效果。关于本项目的更多介绍请参考 link:项目简介.adoc[安宁的微服务^]。
+本项目已部署在网站 https://peacetrue.cn/ 上，可直接查看演示效果。关于本项目的更多介绍请参考 link:./项目简介.adoc[安宁微服务^]。
 
 == 应用地址
 
 所有应用账号密码都是：peacetrue/password。
 
-* 配置中心： https://peacetrue.cn:8888
+* 配置中心： https://peacetrue.cn:8888/actuator/health
 * 注册中心： https://peacetrue.cn:8761
-* 认证授权中心： https://peacetrue.cn:8080/uaa
-* 资源服务： https://peacetrue.cn:8520
-* 内部客户端： https://peacetrue.cn:8530
-* 接口网关： https://peacetrue.cn
-* 外部客户端： https://peacetrue.cn:8531
-
-NOTE: 资源服务只支持 OAuth2 访问令牌认证，不支持表单登陆认证。
+* 认证授权中心： https://peacetrue.cn:8443/uaa
+* 资源服务： https://peacetrue.cn:8520/actuator/health
+* 内部客户端： https://peacetrue.cn:8530/actuator/health
+* 接口网关： https://peacetrue.cn/actuator/health
+* 外部客户端： https://peacetrue.cn:8531/actuator/health
 
 [[client-inner]]
 == 内部客户端-授权码认证流程
