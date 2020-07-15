@@ -1,0 +1,46 @@
+= 快速开始
+
+本文讲解如何在本地快速启动 link:index.adoc[安宁微服务^]。
+
+== 前置要求
+
+需要本地安装 jdk 9 及以上。
+
+== 检出源码
+
+[source%nowrap,shell]
+----
+# 检出微服务源码
+$ git clone https://github.com/peacetrue/peacetrue-microservice-template
+# 检出远程仓库源码
+$ git clone https://github.com/peacetrue/peacetrue-microservice-config-repo-template
+----
+
+以上两个项目需放在同一目录下，并且不能更改项目名。
+
+== 启动应用
+
+打开 peacetrue-microservice-template 项目，可以看到如下项目结构：
+
+.项目结构
+image::快速开始/项目结构.png[]
+
+依次启动模块：
+
+. peacetrue-microservice-config-center：8888
+. peacetrue-microservice-registry-center：8761
+. peacetrue-microservice-uaa：8080
+. peacetrue-microservice-resource-server：8510
+. peacetrue-microservice-client-inner：8530
+. peacetrue-microservice-gateway：8520
+. peacetrue-microservice-client-outer：8531
+
+peacetrue-microservice-uaa 需要部署到 tomcat 启动，其他模块都是从 *Application 类启动。如启动失败，请检查端口是否被占用。
+
+== 查看应用
+
+== 认证码授权
+
+== 客户端凭据
+
+== 后续集成

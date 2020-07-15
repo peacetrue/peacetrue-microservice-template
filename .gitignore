@@ -49,6 +49,5 @@ private.sh
 upload.sh
 docker.sh
 docker
-docs
 peacetrue-microservice-docker
 peacetrue-microservice-uaa/apache-tomcat-9.0.37*

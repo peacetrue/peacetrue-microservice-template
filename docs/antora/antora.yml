@@ -1,0 +1,9 @@
+name: peacetrue-microservice
+title: 安宁微服务
+version: master
+asciidoc:
+  attributes:
+    numbered: ''
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/nav.adoc
