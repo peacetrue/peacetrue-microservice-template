@@ -1,6 +1,6 @@
 name: peacetrue-microservice
 title: 安宁微服务
-version: master
+version: local/1.0.0/basic
 asciidoc:
   attributes:
     numbered: ''
