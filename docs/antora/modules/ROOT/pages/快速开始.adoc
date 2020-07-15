@@ -46,7 +46,7 @@ peacetrue-microservice-uaa 需要部署到 Tomcat 启动（参考 link:./UAA安�
 * http://localhost:8888/actuator/health
 * http://localhost:8761/actuator/health
 * http://localhost:8080/uaa
-//* http://localhost:8520/actuator/health
+* http://localhost:8520/actuator/health
 * http://localhost:8530/actuator/health
 * http://localhost/actuator/health
 * http://localhost:8531/actuator/health
