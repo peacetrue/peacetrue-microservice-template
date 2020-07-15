@@ -14,7 +14,7 @@ values ('peacetrue', 'peacetrue-microservice-resource-server',
         '$2a$10$rzqpwIn6Whkp4XWBJOoEnO2B0P9VP4qq8Tv1pZPEPEVJOnjgu5Kwi', 'openid,message.read,message.write',
         'authorization_code,client_credentials',
         'http://localhost:8530/**,http://localhost:8531/**,https://localhost:8530/**,https://localhost:8531/**,http://peacetrue.cn:8530/**,http://peacetrue.cn:8531/**,https://peacetrue.cn:8530/**,https://peacetrue.cn:8531/**',
-        'message.read、message.write', 6000, null, false, 'uaa', CURRENT_TIMESTAMP, 1);
+        'message.read,message.write', 6000, null, false, 'uaa', CURRENT_TIMESTAMP, 1);
 
 # 添加用户
 insert into users (id, created, lastModified, version, username, password, email, authorities, givenName, familyName,
