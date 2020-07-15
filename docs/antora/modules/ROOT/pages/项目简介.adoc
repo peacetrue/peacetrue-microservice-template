@@ -1,10 +1,10 @@
 = 项目介绍
 
-本文主要介绍 link:index.adoc[安宁微服务^] 项目。
+本文主要介绍微服务项目的基本实现。
 
 == 项目地址
 
-本项目源码放在 https://github.com/peacetrue/peacetrue-microservice-template[Github^] 上，可以检出后查看；如果想在本地运行，还需要检出与本项目配套的 https://github.com/peacetrue/peacetrue-microservice-template[远程仓库^]。
+本项目源码放在 https://github.com/peacetrue/peacetrue-microservice-template[Github^] 上，可以检出后查看；如果想在本地运行，需要检出与本项目配套的 https://github.com/peacetrue/peacetrue-microservice-config-repo-template[远程仓库^]。
 
 == 项目环境
 
