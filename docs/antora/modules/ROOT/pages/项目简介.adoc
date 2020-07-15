@@ -155,7 +155,7 @@ spring.profiles: https
 MICROSERVICE_PROTOCOL: https
 ----
 
-不同的应用，共用同一个远程仓库配置 `application.yml`，然后有一个自己单独的配置 `{应用名}.yml`，上例为：`peacetrue-microservice-app.yml`。远程仓库配置目录结构如下：
+不同的应用，共用同一个远程仓库配置 *application.yml*，然后有一个自己单独的配置 *\{应用名}.yml*，上例为：*peacetrue-microservice-app.yml*。远程仓库配置目录结构如下：
 
 .远程仓库配置目录结构
 image::项目简介/远程仓库配置目录结构.png[]
