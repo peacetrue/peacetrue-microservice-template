@@ -39,6 +39,8 @@ public class WebFluxSecurityConfig {
                                 .hasAuthority("SCOPE_message:write")
                                 .anyExchange().authenticated()
                 )
+                .formLogin()
+                .and()
                 .oauth2ResourceServer(oauth2ResourceServer ->
                         oauth2ResourceServer.jwt(withDefaults())
                 );
