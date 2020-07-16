@@ -6,7 +6,7 @@ spring:
     config:
       #配置中心地址
       uri: ${MICROSERVICE_PROTOCOL:http}://${MICROSERVICE_SECURITY_USERNAME:peacetrue}:${MICROSERVICE_SECURITY_PASSWORD:password}@${MICROSERVICE_CONFIG_HOST:localhost}:${MICROSERVICE_CONFIG_PORT:8888}
-      label: master
+      label: local(_)1.0.0(_)basic
       fail-fast: true
 
 ---
