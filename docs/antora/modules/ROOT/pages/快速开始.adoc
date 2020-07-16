@@ -35,7 +35,7 @@ image::快速开始/项目结构.png[]
 . peacetrue-microservice-gateway：80
 . peacetrue-microservice-client-outer：8531
 
-peacetrue-microservice-uaa 需要部署到 Tomcat 启动（参考 link:./UAA安装部署.adoc[UAA安装部署^]），其他模块都是从 `*Application` 类启动。如启动失败，请检查端口是否被占用。
+peacetrue-microservice-uaa 需要部署到 Tomcat 启动（参考 link:page$UAA安装部署.adoc[UAA安装部署^]），其他模块都是从 `*Application` 类启动。如启动失败，请检查端口是否被占用。
 
 == 查看应用状态
 
@@ -53,8 +53,8 @@ peacetrue-microservice-uaa 需要部署到 Tomcat 启动（参考 link:./UAA安�
 
 == 内部客户端-授权码认证流程
 
-参考 link:./演示效果.adoc#client-inner[演示效果^]
+参考 link:page$演示效果.adoc#client-inner[演示效果^]
 
 == 外部客户端-客户端凭据认证流程
 
-参考 link:./演示效果.adoc#client-outer[演示效果^]
+参考 link:page$演示效果.adoc#client-outer[演示效果^]
