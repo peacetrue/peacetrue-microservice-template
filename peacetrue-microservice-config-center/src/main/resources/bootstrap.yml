@@ -24,7 +24,7 @@ spring:
     config:
       server:
         native:
-          #直接使用本地文件，避免检出 github 仓库
+          #直接使用本地文件，避免检出 github 仓库，相对于 java 命令执行的路径
           searchLocations: file:../peacetrue-microservice-config-repo-template
 
 ---
