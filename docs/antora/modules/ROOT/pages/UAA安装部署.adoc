@@ -1,5 +1,7 @@
 = UAA 安装部署
 
+本文介绍如何安装 UAA 认证授权中心。
+
 == 前提条件
 
 UAA 需要运行在 jdk 11+ 版本上。
@@ -16,7 +18,7 @@ $ chmod +x *.sh
 
 == 安装 UAA
 
-点击 link:{attachmentsdir}/cloudfoundry-identity-uaa-74.21.0.war[cloudfoundry-identity-uaa-74.21.0.war^] 下载 uaa 最新 war 包。将 war 包移动到 apache-tomcat-9.0.37/webapps 目录下并改名为 *uaa.war*。
+点击 link:{attachmentsdir}/cloudfoundry-identity-uaa-74.21.0.war[cloudfoundry-identity-uaa-74.21.0.war^] 下载 UAA 最新 war 包。将 war 包移动到 apache-tomcat-9.0.37/webapps 目录下并改名为 *uaa.war*。
 
 == 配置数据源
 
@@ -37,7 +39,7 @@ database:
 ----
 
 # 先设置 uaa 配置文件的位置：
-$ export JAVA_OPTS="-Dlogging.config={微服务具体的项目位置}/peacetrue-microservice-template/peacetrue-microservice-uaa/log4j2.properties -DUAA_CONFIG_PATH={微服务具体的项目位置}/peacetrue-microservice-template/peacetrue-microservice-uaa"
+$ export JAVA_OPTS="-Dlogging.config={微服务项目具体位置}/peacetrue-microservice-template/peacetrue-microservice-uaa/log4j2.properties -DUAA_CONFIG_PATH={微服务项目具体位置}/peacetrue-microservice-template/peacetrue-microservice-uaa"
 # 然后启动 Tomcat：
 $ apache-tomcat-9.0.37/bin/startup.sh
 ----
@@ -48,13 +50,18 @@ UAA 启动后，会自动创建表结构并初始化部分数据，但不包括�
 
 == 配置 Tomcat SSL
 
-打开 apache-tomcat-9.0.37/conf/server.xml，启用以下配置：
+如无需支持 https，可忽略此步骤。打开 apache-tomcat-9.0.37/conf/server.xml，启用以下配置：
 
 [source%nowrap,xml]
 ----
-
-<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol" maxThreads="150" SSLEnabled="true"> <SSLHostConfig> <Certificate certificateKeystoreFile="/Users/peacetrue/peacetrue.cn.jks" certificateKeystorePassword="password" type="RSA" /> </SSLHostConfig> </Connector>
-
+<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
+           maxThreads="150" SSLEnabled="true">
+  <SSLHostConfig>
+    <Certificate certificateKeystoreFile="/Users/xiayx/peacetrue.cn.jks"
+                 certificateKeystorePassword="password"
+                 type="RSA" />
+  </SSLHostConfig>
+</Connector>
 ----
 
-修改 certificateKeystoreFile 的值，然后新增 certificateKeystorePassword="你的密码"。
+修改 *certificateKeystoreFile* 的值，然后新增 *certificateKeystorePassword="你的密码"*。

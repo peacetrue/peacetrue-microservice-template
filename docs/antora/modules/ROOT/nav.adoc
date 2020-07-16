@@ -1,5 +1,5 @@
 * xref:index.adoc[概述]
-* xref:缘由.adoc[为什么做微服务]
+* xref:缘由.adoc[缘由]
 * xref:项目简介.adoc[项目简介]
 * xref:快速开始.adoc[快速开始]
 * xref:演示效果.adoc[演示效果]
