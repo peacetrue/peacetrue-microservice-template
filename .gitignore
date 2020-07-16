@@ -44,7 +44,7 @@ services/ngrok/*.out
 **/*-local.yml
 **/temp.sql
 **/*.out
-**/cloudfoundry-identity-uaa-74.21.0.war
+**/cloudfoundry-identity-uaa-74.21.0*
 private.sh
 upload.sh
 docker.sh
