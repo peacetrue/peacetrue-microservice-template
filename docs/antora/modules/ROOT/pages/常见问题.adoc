@@ -4,7 +4,7 @@
 
 == 配置中心可以使用远程仓库配置么？
 
-不能。根据 `ConfigCenterApplicationTest#cannotReadRemoteRepository` 的测试结果证明无法读取到远程仓库的属性 `eureka.instance.hostname`。理论上是可以做到的，实际上不必要，因为配置中心运行后，基本不需要修改它自己的配置。
+不能。根据 `ConfigCenterApplicationTest.cannotReadRemoteRepository` 的测试结果证明无法读取到远程仓库的属性 `eureka.instance.hostname`。理论上是可以做到的，实际上不必要，因为配置中心运行后，基本不需要修改它自己的配置。
 
 == 远程仓库检出位置
 
