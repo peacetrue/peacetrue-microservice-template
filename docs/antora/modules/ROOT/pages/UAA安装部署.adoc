@@ -18,15 +18,33 @@ $ chmod +x *.sh
 
 点击 link:{attachmentsdir}/cloudfoundry-identity-uaa-74.21.0.war[cloudfoundry-identity-uaa-74.21.0.war^] 下载 uaa 最新 war 包。将 war 包移动到 apache-tomcat-9.0.37/webapps 目录下并改名为 *uaa.war*。
 
+== 配置数据源
+
+打开 *peacetrue-microservice-template/peacetrue-microservice-uaa/uaa.yml*，修改 MYSQL 数据库连接配置：
+
+[source%nowrap,yml]
+----
+database:
+  driverClassName: org.mariadb.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/uaa?autoreconnect=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+  username: root
+  password: 12345678
+----
+
 == 启动服务
 
 [source%nowrap,shell]
 ----
+
 # 先设置 uaa 配置文件的位置：
 $ export JAVA_OPTS="-Dlogging.config={微服务具体的项目位置}/peacetrue-microservice-template/peacetrue-microservice-uaa/log4j2.properties -DUAA_CONFIG_PATH={微服务具体的项目位置}/peacetrue-microservice-template/peacetrue-microservice-uaa"
 # 然后启动 Tomcat：
 $ apache-tomcat-9.0.37/bin/startup.sh
 ----
+
+== 初始化数据库
+
+UAA 启动后，会自动创建表结构并初始化部分数据，但不包括用户信息。执行 *peacetrue-microservice-template/peacetrue-microservice-uaa/sql/init.sql* 创建测试使用的用户信息。
 
 == 配置 Tomcat SSL
 
@@ -34,14 +52,9 @@ $ apache-tomcat-9.0.37/bin/startup.sh
 
 [source%nowrap,xml]
 ----
-<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
-           maxThreads="150" SSLEnabled="true">
-    <SSLHostConfig>
-        <Certificate certificateKeystoreFile="/Users/peacetrue/peacetrue.cn.jks"
-                     certificateKeystorePassword="password"
-                     type="RSA" />
-    </SSLHostConfig>
-</Connector>
+
+<Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol" maxThreads="150" SSLEnabled="true"> <SSLHostConfig> <Certificate certificateKeystoreFile="/Users/peacetrue/peacetrue.cn.jks" certificateKeystorePassword="password" type="RSA" /> </SSLHostConfig> </Connector>
+
 ----
 
 修改 certificateKeystoreFile 的值，然后新增 certificateKeystorePassword="你的密码"。
