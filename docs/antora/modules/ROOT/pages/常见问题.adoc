@@ -1,14 +1,16 @@
 = 常见问题
 
+本文介绍实现微服务项目过程中遇到的一些问题。
+
 == 配置中心可以使用远程仓库配置么？
 
-不能。根据 `ConfigCenterApplicationTest#cannotReadRemoteRepository` 的测试结果证明无法读取到远程仓库的属性 `eureka.instance.hostname`。理论上是可以做到的，实际上不必要，因为配置中心运行后，基本不需要修改配置。
+不能。根据 `ConfigCenterApplicationTest#cannotReadRemoteRepository` 的测试结果证明无法读取到远程仓库的属性 `eureka.instance.hostname`。理论上是可以做到的，实际上不必要，因为配置中心运行后，基本不需要修改它自己的配置。
 
-== 配置中心默认检出到临时文件
+== 远程仓库检出位置
 
-file:/var/folders/1s/ly4n5ft11r19j6859j20mb380000gn/T/config-repo-12241025313087588660/application.yml (document #1)
+配置中心会检出远程仓库到本地，那么具体位置在哪呢？ 检出到临时目录下。在笔者的 MAC 系统上是 *file:/var/folders/1s/ly4n5ft11r19j6859j20mb380000gn/T/config-repo-12241025313087588660*。
 
-== 不要使用 git.uri: file:/..
+== 不要使用 git.uri: file:../
 
 如果不提交并且 PUSH 到远程仓库，每次检出会覆盖本地已的修改内容。
 
