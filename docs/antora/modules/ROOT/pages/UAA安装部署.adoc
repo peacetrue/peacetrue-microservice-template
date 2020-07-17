@@ -8,7 +8,7 @@ UAA 需要运行在 jdk 11+ 版本上。
 
 == 安装 Tomcat
 
-点击 https://downloads.apache.org/tomcat/tomcat-9/v9.0.37/bin/apache-tomcat-9.0.37.zip[tomcat-9/v9.0.37/bin/apache-tomcat-9.0.37.zip^] 下载 Tomcat。解压后修改脚本执行权限：
+点击 https://downloads.apache.org/tomcat/tomcat-9/v9.0.37/bin/apache-tomcat-9.0.37.zip[apache-tomcat-9.0.37.zip^] 下载 Tomcat。解压后修改脚本执行权限：
 
 [source%nowrap,shell]
 ----
@@ -18,7 +18,7 @@ $ chmod +x *.sh
 
 == 安装 UAA
 
-点击 link:{attachmentsdir}/cloudfoundry-identity-uaa-74.21.0.war[cloudfoundry-identity-uaa-74.21.0.war^] 下载 UAA 最新 war 包。将 war 包移动到 apache-tomcat-9.0.37/webapps 目录下并改名为 *uaa.war*。
+点击 https://peacetrue.cn/download/cloudfoundry-identity-uaa-74.21.0.war[cloudfoundry-identity-uaa-74.21.0.war^] 下载 UAA 最新 war 包。将 war 包移动到 apache-tomcat-9.0.37/webapps 目录下并改名为 *uaa.war*。
 
 == 配置数据源
 
