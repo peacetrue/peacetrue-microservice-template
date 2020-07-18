@@ -2,22 +2,24 @@ spring:
   application:
     #应用名
     name: peacetrue-microservice-config-center
-  security:
-    #访问配置中心的用户账号和密码
-    user:
-      name: ${MICROSERVICE_SECURITY_USERNAME:peacetrue}
-      password: ${MICROSERVICE_SECURITY_PASSWORD:password}
+  cloud:
+    config:
+      server:
+        #配置中心允许读取环境仓库的配置
+        bootstrap: true
+#        native:
+#          #直接使用本地文件，避免检出 github 仓库，相对于 java 命令执行的路径
+#          searchLocations: file:../peacetrue-microservice-config-repo-template
 
-server.port: ${MICROSERVICE_CONFIG_PORT:8888}
-management.endpoints.web.exposure.include: "*"
+#management.endpoints.web.exposure.include: "*"
 
-logging.level.org.springframework: debug
-logging.level.com.github.peacetrue: debug
+#使用本地文件需要包含 native
+spring.profiles.include: rabbitmq
+#logging.level.com.github.peacetrue: debug applicationConfig
 
 ---
-#非生产环境
-spring.profiles: '!prod'
-#使用本地文件需要包含 native
+#默认情况未激活此项，原因不明。实际使用 bootstrap-default.yml 替代
+spring.profiles: default
 spring.profiles.include: native
 spring:
   cloud:
@@ -31,12 +33,14 @@ spring:
 #生产环境
 spring.profiles: prod
 #默认激活 https 和 log
-spring.profiles.include: https,log
+#spring.profiles.include: https,log
 
 spring:
   cloud:
     config:
       server:
+        #默认分支，此处不需要转译，客户端需要转译成 dev(_)1.1.0(_)config-sync
+        default-label: dev/1.1.0/config-sync
         git:
           #远程资源库地址
           uri: https://github.com/peacetrue/peacetrue-microservice-config-repo-template
@@ -44,21 +48,33 @@ spring:
           username: '${MICROSERVICE_REPO_USERNAME:peacetrue}'
           password: '${MICROSERVICE_REPO_PASSWORD:password}'
 
-logging.level.org.springframework: info
-logging.level.com.github.peacetrue: info
-
----
-#默认 http 协议，激活此配置切换到 https 协议
-spring.profiles: https
-
-server:
-  ssl:
-    key-store: file://${user.home}/peacetrue.cn.jks
-    key-alias: peacetrue.cn
-    key-store-password: ${MICROSERVICE_SSL_PASSWORD:password}
-
----
-#默认输出到控制台，激活此配置切换到文件
-spring.profiles: log
-
-logging.file.name: logs/root.log
+#logging.level.org.springframework: info
+#logging.level.com.github.peacetrue: info
+#
+#---
+##默认 http 协议，激活此配置切换到 https 协议
+#spring.profiles: https
+#
+#server:
+#  ssl:
+#    key-store: file://${user.home}/peacetrue.cn.jks
+#    key-alias: peacetrue.cn
+#    key-store-password: ${MICROSERVICE_SSL_PASSWORD:password}
+#
+#---
+##默认输出到控制台，激活此配置切换到文件
+#spring.profiles: log
+#
+#logging.file.name: logs/root.log
+#
+#---
+##消息总线通过 rabbitmq 发送消息
+#spring.profiles: rabbitmq
+#spring:
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    username: guest
+#    password: guest
+#bootstrap-local:bootstrap-default
+#  rename "s/bootstrap-local/bootstrap-default/" `find . -name 'bootstrap-local.yml'`

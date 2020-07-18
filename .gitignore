@@ -41,7 +41,7 @@ services/ngrok/*.out
 **/node_modules
 
 #本地文件
-**/*-local.yml
+**/*-default.yml
 **/temp.sql
 **/*.out
 **/cloudfoundry-identity-uaa-74.21.0*
