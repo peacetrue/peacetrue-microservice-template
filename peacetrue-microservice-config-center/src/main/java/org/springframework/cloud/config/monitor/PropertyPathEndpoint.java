@@ -75,9 +75,15 @@ public class PropertyPathEndpoint implements ApplicationEventPublisherAware {
             if (this.applicationEventPublisher != null) {
                 for (String service : services) {
                     log.info("Refresh for: " + service);
-                    this.applicationEventPublisher.publishEvent(
-                            new RefreshRemoteApplicationEvent(this, this.busId, service));
+                    //peacetrue-change：异步执行
+                    new Thread(new Runnable() {
+                        public void run() {
+                            applicationEventPublisher.publishEvent(
+                                    new RefreshRemoteApplicationEvent(this, busId, service));
+                        }
+                    }).start();
                 }
+                log.info("finished notifyByPath");
                 return services;
             }
 
@@ -102,6 +108,7 @@ public class PropertyPathEndpoint implements ApplicationEventPublisherAware {
             String stem = StringUtils.stripFilenameExtension(
                     StringUtils.getFilename(StringUtils.cleanPath(path)));
             // TODO: correlate with service registry
+            //peacetrue-change：取消以中划线分割算法
 //            int index = stem.indexOf("-");
 //            while (index >= 0) {
 //                String name = stem.substring(0, index);
