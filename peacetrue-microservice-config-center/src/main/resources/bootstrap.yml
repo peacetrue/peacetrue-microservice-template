@@ -7,19 +7,14 @@ spring:
       server:
         #配置中心允许读取环境仓库的配置
         bootstrap: true
-#        native:
-#          #直接使用本地文件，避免检出 github 仓库，相对于 java 命令执行的路径
-#          searchLocations: file:../peacetrue-microservice-config-repo-template
 
-#management.endpoints.web.exposure.include: "*"
-
-#使用本地文件需要包含 native
 spring.profiles.include: rabbitmq
 #logging.level.com.github.peacetrue: debug applicationConfig
 
 ---
 #默认情况未激活此项，原因不明。实际使用 bootstrap-default.yml 替代
 spring.profiles: default
+#使用本地文件需要包含 native
 spring.profiles.include: native
 spring:
   cloud:
@@ -32,8 +27,6 @@ spring:
 ---
 #生产环境
 spring.profiles: prod
-#默认激活 https 和 log
-#spring.profiles.include: https,log
 
 spring:
   cloud:
@@ -48,33 +41,3 @@ spring:
           username: '${MICROSERVICE_REPO_USERNAME:peacetrue}'
           password: '${MICROSERVICE_REPO_PASSWORD:password}'
 
-#logging.level.org.springframework: info
-#logging.level.com.github.peacetrue: info
-#
-#---
-##默认 http 协议，激活此配置切换到 https 协议
-#spring.profiles: https
-#
-#server:
-#  ssl:
-#    key-store: file://${user.home}/peacetrue.cn.jks
-#    key-alias: peacetrue.cn
-#    key-store-password: ${MICROSERVICE_SSL_PASSWORD:password}
-#
-#---
-##默认输出到控制台，激活此配置切换到文件
-#spring.profiles: log
-#
-#logging.file.name: logs/root.log
-#
-#---
-##消息总线通过 rabbitmq 发送消息
-#spring.profiles: rabbitmq
-#spring:
-#  rabbitmq:
-#    host: localhost
-#    port: 5672
-#    username: guest
-#    password: guest
-#bootstrap-local:bootstrap-default
-#  rename "s/bootstrap-local/bootstrap-default/" `find . -name 'bootstrap-local.yml'`
