@@ -1,6 +1,6 @@
 name: peacetrue-microservice-template
 title: 安宁微服务
-version: local/1.1.0/config-sync
+version: local(-)1.1.0(-)config-sync
 asciidoc:
   attributes:
     numbered: ''
