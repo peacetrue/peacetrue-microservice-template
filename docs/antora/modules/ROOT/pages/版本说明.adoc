@@ -16,11 +16,16 @@
 . 配置中心从远程仓库读取配置
 . 远程仓库配置修改后，实时同步受影响的应用
 
-== 待实现
+== v1.2.0（实现中）
 
 版本特性：
 
 . 集成 `Spring Cloud Sleuth`
+
+== 待实现
+
+版本特性：
+
 . 集成 `Spring Cloud Circuit Breaker`
 . 集成 `Spring Cloud OpenFeign`
 . 集成 https://github.com/codecentric/spring-boot-admin[`spring-boot-admin`^]
