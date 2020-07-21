@@ -20,6 +20,14 @@ subprojects { project ->
     sourceCompatibility = 9
     targetCompatibility = 9
 
+//    sourceSets {
+//        main {
+//            resources {
+//                srcDirs "src/main/resources", "../peacetrue-common"
+//            }
+//        }
+//    }
+
     repositories {
         mavenLocal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }

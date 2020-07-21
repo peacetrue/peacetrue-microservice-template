@@ -1,12 +1,16 @@
 description '配置中心'
+
 dependencies {
     //配置服务
     implementation 'org.springframework.cloud:spring-cloud-config-server'
     //配置属性监听和推送
     implementation 'org.springframework.cloud:spring-cloud-config-monitor'
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+    //消息追踪
+    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
     //安全
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 }

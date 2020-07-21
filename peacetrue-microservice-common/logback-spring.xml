@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+    <!--默认值-->
+    <springProperty scope="context" name="rootLevel" source="logging.level.root" defaultValue="debug"/>
+    <property name="amqpHost" value="localhost"/>
+    <property name="amqpPort" value="5672"/>
+    <property name="amqpUsername" value="guest"/>
+    <property name="amqpPassword" value="guest"/>
+    ​
+    <!--生产环境值-->
+    <springProfile name="prod">
+        <property name="rootLevel" value="info"/>
+        <property name="amqpHost" value="peacetrue.cn"/>
+        <property name="amqpPort" value="5672"/>
+        <property name="amqpUsername" value="guest"/>
+        <property name="amqpPassword" value="guest"/>
+    </springProfile>
+
+    <!-- Appender to log to file in a JSON format -->
+    <appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+        <layout>
+            <pattern>
+                {
+                "service": "${springAppName:-}",
+                "trace": "%X{X-B3-TraceId:-}",
+                "span": "%X{X-B3-SpanId:-}",
+                "parent": "%X{X-B3-ParentSpanId:-}",
+                "time": "%date{ISO8601}",
+                "level": "%level",
+                "thread": "%thread",
+                "class": "%logger{36}",
+                "message": "%message"
+                }
+            </pattern>
+        </layout>
+
+        <host>${amqpHost}</host>
+        <port>${amqpPort}</port>
+        <username>${amqpUsername}</username>
+        <password>${amqpPassword}</password>
+        <applicationId>${springAppName}</applicationId>
+        <!--应用名.类名.日志级别-->
+        <routingKeyPattern>${springAppName}.%c.%p</routingKeyPattern>
+        <declareExchange>true</declareExchange>
+        <exchangeName>logger</exchangeName>
+        <exchangeType>topic</exchangeType>
+        <generateId>true</generateId>
+        <charset>UTF-8</charset>
+        <durable>true</durable>
+        <deliveryMode>PERSISTENT</deliveryMode>
+    </appender>
+    ​
+    <springProfile name="rabbitmqLog">
+        <root level="${rootLevel}">
+            <appender-ref ref="AMQP"/>
+        </root>
+        <!--很重要，DEBUG 级别会死循环。调用 RabbitTemplate 上传日志会记录 DEBUG 级别日志，记录日志又会触发上传日志 -->
+        <logger name="org.springframework.amqp.rabbit.core" level="INFO"/>
+    </springProfile>
+
+</configuration>
