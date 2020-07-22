@@ -27,6 +27,7 @@ image::快速开始/项目结构.png[]
 
 依次启动模块：
 
+. peacetrue-microservice-zipkin：9411
 . peacetrue-microservice-config-center：8888
 . peacetrue-microservice-registry-center：8761
 . peacetrue-microservice-uaa：8080

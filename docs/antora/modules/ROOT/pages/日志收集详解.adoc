@@ -1,0 +1,202 @@
+= 日志收集详解
+
+本文详细介绍日志信息从应用到 Elasticsearch 的具体传输过程。
+
+== 概述
+
+首先，需要确定日志信息的内容，这里主要讨论 *对象内容*，同时涉及 *文本内容*。
+
+=== 文本内容
+
+*文本内容* 只上传日志信息的消息，最终在 Kibana 看到的日志信息，类似我们在控制台看到的：
+
+.Kibana 日志
+image::日志收集详解/kibana文本方式.png[]
+
+上图只展示 `message` 字段，无法排序，需要加上时间戳：
+
+image::日志收集详解/kibana日志时间戳.png[]
+
+时间戳仅用于排序，没有其他用途。
+
+=== 对象内容
+
+*对象内容* 会上传日志信息的 JSON 对象，其中可以包含文本内容提到的消息和其他字段。在 Kibana 中，可以选择需要的字段组合展示：
+
+.kibana日志对象
+image::日志收集详解/kibana日志对象.png[]
+
+上图，展示出时间、应用、日志级别、日志类和消息；数据多了，界面展示很乱，如果能固定列宽，溢出隐藏，单行展示会比较美。
+
+== 配置 AmqpAppender
+
+`AmqpAppender` 的详细配置参考 https://docs.spring.io/spring-amqp/docs/2.3.0-SNAPSHOT/reference/html/#logging[spring-amqp-logging^]。
+
+`AmqpAppender` 会使用一些默认值，合适的默认值不会修改直接延用：
+
+.logback-spring.xml
+[source%nowrap,xml]
+----
+<springProperty scope="context" name="appId" source="spring.application.name"/>
+<appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+    <!--默认值-->
+    <host>localhost</host>
+    <!--默认值-->
+    <port>5672</port>
+    <!--默认值-->
+    <virtualHost>/</virtualHost>
+    <!--默认值-->
+    <username>guest</username>
+    <!--默认值-->
+    <password>guest</password>
+    <!--默认值 false，改为 true -->
+    <declareExchange>true</declareExchange>
+    <!--默认值-->
+    <exchangeName>logs</exchangeName>
+    <!--默认值-->
+    <exchangeType>topic</exchangeType>
+    <!--默认值-->
+    <durable>true</durable>
+    <!--默认值-->
+    <autoDelete>false</autoDelete>
+    <!--默认值-->
+    <routingKeyPattern>%c.%p</routingKeyPattern>
+    <!--默认值-->
+    <deliveryMode>PERSISTENT</deliveryMode>
+    <!--默认值-->
+    <senderPoolSize>2</senderPoolSize>
+    <!--默认值-->
+    <maxSenderRetries>30</maxSenderRetries>
+
+    <!--默认值-->
+    <contentType>text/plain</contentType>
+    <!--无默认值，设置为 UTF-8 -->
+    <contentEncoding>UTF-8</contentEncoding>
+    <!--无默认值，从配置文件读取  -->
+    <applicationId>${appId}</applicationId>
+    <!--默认值 false-->
+    <generateId>false</generateId>
+    <!--默认值 true -->
+    <addMdcAsHeaders>true</addMdcAsHeaders>
+
+    <!--文本内容：简单按文件格式输出 -->
+    <layout><pattern>${FILE_LOG_PATTERN}</pattern></layout>
+    <!--对象内容：与文本内容二选一 -->
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        <excludeMdcKeyName>rootLevel</excludeMdcKeyName>
+        <shortenedLoggerNameLength>36</shortenedLoggerNameLength>
+        <fieldNames>
+            <logger>class</logger>
+            <thread>thread</thread>
+        </fieldNames>
+    </encoder>
+</appender>
+----
+
+以上配置会输出什么结果呢？除了在 `pattern` 中声明的属性，`AmqpAppender` 还会自动添加一些其他属性，包括：`deliveryMode`、`contentType`、`contentEncoding`、`messageId`、`timestamp`、`appId` 等。
+
+停止 Logstash（避免其消费消息），从 RabbitMQ 查看日志信息：
+
+.含追踪信息的日志
+image::日志收集详解/rabbitmq追踪信息.png[]
+
+追踪信息（`traceId`、`spanId`、`spanExportable`）是由 `spring-cloud-starter-sleuth` 提供的，设置参数 `addMdcAsHeaders=true`，会自动携带追踪信息。
+
+NOTE: RabbitMQ 中消息包含属性部分和负载部分，与 Logstash 集成时，只使用负载部分，所以不需要设置 `addMdcAsHeaders=true`。footnote:[如果想配合属性部分使用，也是可以的，但需要改造 Logstash，本文不讨论]
+
+追踪信息同时也会出现在负载中：
+
+[source%nowrap,json]
+----
+{
+  "@timestamp": "2020-07-22T19:25:44.345+08:00",
+  "@version": 1,
+  "message": "/actuator/configprops at position 2 of 15 in additional filter chain; firing Filter: 'SecurityContextPersistenceFilter'",
+  "class": "o.s.security.web.FilterChainProxy",
+  "thread": "http-nio-8888-exec-7",
+  "level": "DEBUG",
+  "level_value": 10000,
+  "app_id": "peacetrue-microservice-config-center",
+  "traceId": "a83467a14506d0f6",
+  "spanId": "a83467a14506d0f6",
+  "spanExportable": "false",
+}
+----
+
+这得益于 https://github.com/logstash/logstash-logback-encoder[logstash-logback-encoder^] 的支持。
+
+日志信息已经发出，Logstash 会怎么处理呢？
+
+== 配置 logstash.conf
+
+logstash.conf 的详细配置参考 https://www.elastic.co/guide/en/logstash/current/plugins-inputs-rabbitmq.html#plugins-inputs-rabbitmq[plugins-inputs-rabbitmq^]。
+
+Logstash 会使用一些默认值，合适的默认值不会修改直接延用：
+
+.logstash.conf
+[source%nowrap,json]
+----
+input {
+    rabbitmq {
+        #无默认值
+        host => "rabbitmq"
+        #默认值
+        port => 5672
+        #无默认值，设置为 logs，与 AmqpAppender 相同，如果不存在会自动创建交换机
+        exchange => "logs"
+        #无默认值，同上
+        exchange_type => "topic"
+        #默认值 false，设置为 true，与 AmqpAppender 相同
+        durable => true
+        #无默认值，设置为 # ，匹配所有消息
+        key => "#"
+        #默认值""，随机生成，设置为 logstash
+        queue => "logstash"
+        #无默认值
+        type => "logstash"
+        #默认值
+        codec => "json"
+        #默认值 false，只读取负载部分内容，不读取属性
+        metadata_enabled => false
+    }
+}
+----
+
+Logstash 默认不会读取消息的属性信息，这会加重负载。与之配合，设置 AmqpAppender 的 `addMdcAsHeaders` 为 `false`。Logstash 会向读取的数据中填充 `@timestamp=当前时间`、`@version="1"`、`type="logstash"` 属性（如果不存在），然后发送给 Elasticsearch。
+
+== Elasticsearch
+
+从 Kibana 查看展示的日志详细数据：
+
+[source%nowrap,json]
+----
+{
+  "_index": "logstash-2020.07.22-000001",
+  "_type": "_doc",
+  "_id": "fdFfdnMBkX8Py3sCZ1uY",
+  "_version": 1,
+  "_score": 0,
+  "_source": {
+    "class": "o.s.s.w.a.ExceptionTranslationFilter",
+    "level_value": 10000,
+    "message": "Chain processed normally",
+    "@timestamp": "2020-07-22T11:53:50.587Z",
+    "X-B3-TraceId": "f5f45881f350f422",
+    "traceId": "f5f45881f350f422",
+    "thread": "http-nio-8888-exec-4",
+    "level": "DEBUG",
+    "type": "logstash",
+    "X-B3-SpanId": "f5f45881f350f422",
+    "spanExportable": "false",
+    "app_id": "peacetrue-microservice-config-center",
+    "@version": 1,
+    "rootLevel": "DEBUG",
+    "spanId": "f5f45881f350f422",
+    "X-Span-Export": "false"
+  },
+  ...
+}
+----
+
+其中，`_source` 是从 Logstash 发过来的数据，其他是由 Elasticsearch 生成的。
+

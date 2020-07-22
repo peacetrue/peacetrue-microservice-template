@@ -15,20 +15,21 @@
 . https://www.elastic.co/products/kibana[Kibana^]
 . https://www.splunk.com/[Splunk^]
 
-笔者这里使用 Kibana 实现日志收集，Kibana 只做日志信息可视化展示，还需要使用到 Elasticsearch 和 Logstash，俗称 ELK。
+笔者这里使用 Kibana 实现日志收集，Kibana 只做日志信息可视化，还需要使用到 https://www.elastic.co/cn/elasticsearch/[Elasticsearch^] 和 https://www.elastic.co/cn/logstash[Logstash^]，俗称 ELK。
 
 == 安装 ELK
 
-参考 https://github.com/deviantony/docker-elk[docker-elk^]，检出到本地后进行修改。主要修改 Logstash 的配置：
+参考 https://github.com/deviantony/docker-elk[docker-elk^]，检出到本地后，修改 Logstash 配置：
 
 .learn-docker/composes/elk/logstash/config/logstash.yml
 [source%nowrap,conf]
 ----
+#指定接收 logstash 队列中的所有消息
 input {
 	rabbitmq {
 	    host => "rabbitmq"
 	    port => 5672
-    	type => "all"
+    	type => "logstash"
 	    exchange => "logger"
 	    exchange_type => "topic"
 	    key => "#"
@@ -40,8 +41,6 @@ input {
 
 修改后内容已上传至 https://github.com/peacetrue/learn-docker[peacetrue-docker^]，可检出后与本项目配套使用。
 
-WARNING: ELK 比较耗资源，而且很多功能都用不到，后期进行调整。
-
 == 改造项目
 
 修改项目日志配置，输出日志到消息队列。添加 `logback-spring.xml` 配置文件，重要部分内容如下：
@@ -50,34 +49,28 @@ WARNING: ELK 比较耗资源，而且很多功能都用不到，后期进行调�
 [source%nowrap,xml]
 ----
 <appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
-    <layout>
-        <pattern>
-            {
-            "time": "%date{ISO8601}",
-            "thread": "%thread",
-            "level": "%level",
-            "class": "%logger{36}",
-            "message": "%message"
-            }
-        </pattern>
-    </layout>
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        <excludeMdcKeyName>rootLevel</excludeMdcKeyName>
+        <shortenedLoggerNameLength>36</shortenedLoggerNameLength>
+        <fieldNames>
+            <logger>class</logger>
+            <thread>thread</thread>
+        </fieldNames>
+    </encoder>
+
 
     <host>${amqpHost}</host>
     <port>${amqpPort}</port>
     <username>${amqpUsername}</username>
     <password>${amqpPassword}</password>
+    <durable>false</durable>
+    <deliveryMode>NON_PERSISTENT</deliveryMode>
     <applicationId>${springAppName}</applicationId>
-    <!--应用名.类名.日志级别-->
-    <routingKeyPattern>${springAppName}.%c.%p</routingKeyPattern>
-    <declareExchange>true</declareExchange>
-    <exchangeName>logger</exchangeName>
-    <exchangeType>topic</exchangeType>
     <generateId>true</generateId>
+
     <charset>UTF-8</charset>
-    <durable>true</durable>
-    <deliveryMode>PERSISTENT</deliveryMode>
 </appender>
-<springProfile name="prod">
+<springProfile name="rabbitmqLog">
     <root level="${rootLevel}">
         <appender-ref ref="AMQP"/>
     </root>
@@ -98,7 +91,7 @@ image::日志收集/消息交换机.png[]
 
 == 查看日志
 
-打开 Kibana 页面 http://localhost:5601 footnode:[账号密码： elastic/changeme]，查看日志信息：
+打开 Kibana 页面 http://localhost:5601 ，输入账号密码 elastic/changeme，查看日志信息：
 
 .kibana日志信息
 image::日志收集/kibana日志信息.png[]
@@ -127,32 +120,19 @@ image::日志收集/kibana日志信息.png[]
 
 这是 Sleuth 提供的，有了这些信息，就可以将整个请求链条串起来。
 
-
-然后，修改日志配置 `logback-spring.xml`：
-
-.logback-spring.xml
-[source%nowrap,xml]
-----
-<pattern>
-{
-"service": "${springAppName:-}",
-"trace": "%X{X-B3-TraceId:-}",
-"span": "%X{X-B3-SpanId:-}",
-"parent": "%X{X-B3-ParentSpanId:-}",
-"time": "%date{ISO8601}",
-"thread": "%thread",
-"level": "%level",
-"class": "%logger{36}",
-"message": "%message"
-}
-</pattern>
-----
-
-添加 `service`、`trace`、`span`、`parent` 4 个属性，将追踪信息输出到 RabbitMQ。重新查看 Kibana：
+重新查看 Kibana：
 
 .重新查看 Kibana
 image::日志收集/重新查看Kibana.png[]
 
 现在通过 `trace` 过滤，就能查出整个请求涉及的相关日志。
 
+== 关于 logstash-logback-encoder
 
+参考 https://www.baeldung.com/java-application-logs-to-elastic-stack
+
+可以直接使用 `net.logstash.logback:logstash-logback-encoder:4.11` ，从日志文件中读取日志后上传到 Elasticsearch，不需要使用 RabbitMQ，也不需要单独部署 Logstash 服务，简化了流程。但需要每个项目配置类似的 `logback.conf`，`logback.conf` 中不能使用占位符footnote:[未经证实]，分环境配置也很麻烦，最终放弃。
+
+== 总结
+
+做完之后，发现用 https://sentry.io/[Sentry^] 更合适。ELK 主要是全文检索分析统计，如果只是汇总查看信息没必要。

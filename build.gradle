@@ -42,6 +42,9 @@ subprojects { project ->
             //自动使用最新版本
             mavenBom "com.github.peacetrue:peacetrue-dependencies:2+"
         }
+        dependencies {
+            dependency 'net.logstash.logback:logstash-logback-encoder:6.4'
+        }
     }
 
     dependencies {

@@ -8,20 +8,19 @@ spring:
         #配置中心允许读取环境仓库的配置
         bootstrap: true
 
-spring.profiles.include: rabbitmq
-#logging.level.com.github.peacetrue: debug applicationConfig
-
 ---
-#默认情况未激活此项，原因不明。实际使用 bootstrap-default.yml 替代
+# 不支持 '!prod'，使用 default
 spring.profiles: default
 #使用本地文件需要包含 native
 spring.profiles.include: native
+
 spring:
   cloud:
     config:
       server:
         native:
           #直接使用本地文件，避免检出 github 仓库，相对于 java 命令执行的路径
+          # FileMonitorConfiguration       : Cannot resolve URI for path: file:../peacetrue-microservice-config-repo-template
           searchLocations: file:../peacetrue-microservice-config-repo-template
 
 ---

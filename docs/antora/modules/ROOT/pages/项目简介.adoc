@@ -19,6 +19,11 @@
 
 http 和 https 端口默认是相同的，如果不同会单独说明。
 
+peacetrue-microservice-common::
+公共模块，存放所有其他模块公用的信息，目前包含：
+. logback-spring.xml：日志配置
+peacetrue-microservice-zipkin::
+Zipkin 服务，监听在 9411 端口，用于收集请求追踪信息，展示请求在各个应用之间完整的流动轨迹，尚不支持 HTTPS。依赖于存储组件的 Elasticsearch 。以下所有模块都会向 Zipkin 上传请求追踪信息。
 peacetrue-microservice-config-center::
 配置中心，监听在 8888 端口，关联 https://github.com/peacetrue/peacetrue-microservice-config-repo-template[peacetrue-microservice-config-repo-template^] 远程仓库。
 peacetrue-microservice-registry-center::
@@ -37,6 +42,8 @@ peacetrue-microservice-client-inner::
 内部客户端，供内部系统使用，监听在 8530 端口，关联配置中心、注册中心、认证中心和资源服务，提供基于 OAuth2 的授权码认证。
 peacetrue-microservice-client-outer::
 外部客户端，供第三方系统使用，监听在 8531 端口，关联接口网关和认证授权中心，提供基于 OAuth2 的客户端凭据认证。
+
+NOTE: 项目依赖的其他组件，可以在 https://github.com/peacetrue/learn-docker[peacetrue-docker^] 中找到，简单地使用 docker 快速启动。
 
 == 配置说明
 

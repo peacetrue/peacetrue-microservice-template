@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <!--#禁用控制台日志，see https://stackoverflow.com/questions/43918414/how-to-disable-console-logging-in-spring-boot-->
 
-    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}}/spring.log}"/>
-    <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
-    <root level="INFO">
-        <appender-ref ref="FILE" />
-    </root>
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+    <springProperty scope="context" name="app_id" source="spring.application.name"/>
     <springProperty scope="context" name="rootLevel" source="logging.level.root" defaultValue="debug"/>
     <property name="amqpHost" value="localhost"/>
     <property name="amqpPort" value="5672"/>
@@ -24,37 +23,30 @@
         <property name="amqpPassword" value="guest"/>
     </springProfile>
 
-    <!-- Appender to log to file in a JSON format -->
     <appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
-        <layout>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-        </layout>
-
-<!--
-        <layout>
-            <pattern><![CDATA[ %d %p %t [%c] - <%m>%n ]]></pattern>
-            &lt;!&ndash;
-                        <pattern>{
-                            "traceId": "%X{X-B3-TraceId:-}",
-                            "spanId": "%X{X-B3-SpanId:-}",
-                            "parentSpanId": "%X{X-B3-ParentSpanId:-}",
-                            "class": "%c",
-                            "message": "%message"
-                            }</pattern>
-            &ndash;&gt;
-        </layout>
--->
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <!-- //TODO excludeMdcKeyName 不生效-->
+            <excludeMdcKeyName>rootLevel</excludeMdcKeyName>
+            <excludeMdcKeyName>X-Span-Export</excludeMdcKeyName>
+            <excludeMdcKeyName>X-B3-SpanId</excludeMdcKeyName>
+            <excludeMdcKeyName>X-B3-TraceId</excludeMdcKeyName>
+            <shortenedLoggerNameLength>36</shortenedLoggerNameLength>
+            <fieldNames>
+                <logger>class</logger>
+                <thread>thread</thread>
+            </fieldNames>
+        </encoder>
 
         <!--默认值-->
-        <host>localhost</host>
+        <host>${amqpHost}</host>
         <!--默认值-->
-        <port>5672</port>
+        <port>${amqpPort}</port>
         <!--默认值-->
         <virtualHost>/</virtualHost>
         <!--默认值-->
-        <username>guest</username>
+        <username>${amqpUsername}</username>
         <!--默认值-->
-        <password>guest</password>
+        <password>${amqpPassword}</password>
         <!--默认值 false，改为 true -->
         <declareExchange>true</declareExchange>
         <!--默认值-->
@@ -74,23 +66,33 @@
         <!--默认值-->
         <maxSenderRetries>30</maxSenderRetries>
 
-        <!--默认值-->
+        <!--默认值 -->
         <contentType>text/plain</contentType>
         <!--无默认值，设置为 UTF-8 -->
         <contentEncoding>UTF-8</contentEncoding>
 
         <!--无默认值，从配置文件读取  -->
-        <applicationId>${springAppName}</applicationId>
-        <!--默认值 false，改为 true -->
-        <generateId>true</generateId>
+        <applicationId>${app_id}</applicationId>
+        <!--默认值-->
+        <generateId>false</generateId>
         <!--默认值 -->
         <addMdcAsHeaders>true</addMdcAsHeaders>
+
     </appender>
     ​
-    <springProfile name="rabbitmqLog">
-        <root level="${rootLevel}">
+    <root level="${rootLevel}">
+        <springProfile name="consoleLog">
+            <appender-ref ref="CONSOLE"/>
+        </springProfile>
+        <springProfile name="fileLog">
+            <appender-ref ref="FILE"/>
+        </springProfile>
+        <springProfile name="rabbitmqLog">
             <appender-ref ref="AMQP"/>
-        </root>
+        </springProfile>
+    </root>
+
+    <springProfile name="rabbitmqLog">
         <!--很重要，DEBUG 级别会死循环。调用 RabbitTemplate 上传日志会记录 DEBUG 级别日志，记录日志又会触发上传日志 -->
         <logger name="org.springframework.amqp.rabbit" level="OFF"/>
     </springProfile>
