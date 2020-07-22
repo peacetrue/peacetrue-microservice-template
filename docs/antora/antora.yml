@@ -1,6 +1,6 @@
 name: peacetrue-microservice-template
 title: 安宁微服务
-version: master
+version: dev(_)1.2.0(_)sleuth
 asciidoc:
   attributes:
     numbered: ''
