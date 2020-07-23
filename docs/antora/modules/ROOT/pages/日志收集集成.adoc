@@ -1,4 +1,4 @@
-= 日志收集
+= 日志收集集成
 
 本文简单介绍如何在项目中集成日志收集。
 
@@ -17,7 +17,7 @@
 
 笔者这里使用 Kibana 实现日志收集，Kibana 只做日志信息可视化，还需要使用到 https://www.elastic.co/cn/elasticsearch/[Elasticsearch^] 和 https://www.elastic.co/cn/logstash[Logstash^]，俗称 ELK。
 
-== 安装 ELK
+== 通过 Docker 安装 ELK
 
 参考 https://github.com/deviantony/docker-elk[docker-elk^]，检出到本地后，修改 Logstash 配置：
 
@@ -39,7 +39,7 @@ input {
 }
 ----
 
-修改后内容已上传至 https://github.com/peacetrue/learn-docker[peacetrue-docker^]，可检出后与本项目配套使用。
+修改后内容已上传至 https://github.com/peacetrue/learn-docker/tree/master/composes/elk[peacetrue-docker^]，可检出后与本项目配套使用。
 
 == 改造项目
 
@@ -98,7 +98,7 @@ image::日志收集/kibana日志信息.png[]
 
 == 集成 Sleuth
 
-现在 Kibana 可以看到所有应用的日志信息，但不能查看某个特定请求footnode:[比如访问外部客户端的 /message 接口，外部客户端会调接口网关，接口网关再调用资源服务]相关的所有日志，需要通过 Sleuth 添加追踪信息。
+现在 Kibana 可以看到所有应用的日志信息，但不能查看某个特定请求footnote:[比如访问外部客户端的 /message 接口，外部客户端会调接口网关，接口网关再调用资源服务]相关的所有日志，需要通过 Sleuth 添加追踪信息。
 
 首先，在项目中添加 `org.springframework.cloud:spring-cloud-starter-sleuth` 依赖。重新启动项目后，日志信息如下：
 
