@@ -14,6 +14,8 @@ spring.profiles: default
 #使用本地文件需要包含 native
 spring.profiles.include: native
 
+---
+spring.profiles: native
 spring:
   cloud:
     config:

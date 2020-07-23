@@ -36,7 +36,11 @@ image::快速开始/项目结构.png[]
 . peacetrue-microservice-gateway：80
 . peacetrue-microservice-client-outer：8531
 
-peacetrue-microservice-uaa 需要部署到 Tomcat 启动（参考 xref:UAA安装部署.adoc[UAA安装部署]），其他模块都是从 `*Application` 类启动。如启动失败，请检查端口是否被占用。
+启动方式说明：
+
+. peacetrue-microservice-zipkin 通过 peacetrue-microservice-zipkin/restart.sh 启动（参考 xref:链路追踪.adoc[链路追踪]）。
+. peacetrue-microservice-uaa 需要部署到 Tomcat 启动（参考 xref:UAA安装部署.adoc[UAA安装部署]）。
+. 其他模块都是从 `*Application` 类启动。如启动失败，请检查端口是否被占用。
 
 == 查看应用状态
 
@@ -44,6 +48,7 @@ peacetrue-microservice-uaa 需要部署到 Tomcat 启动（参考 xref:UAA安装
 
 依次打开各个应用，查看运行情况：
 
+* http://localhost:9411/zipkin/
 * http://localhost:8888/actuator/health
 * http://localhost:8761/actuator/health
 * http://localhost:8080/uaa

@@ -6,6 +6,8 @@
 
 所有应用账号密码都是：peacetrue/password。
 
+* 日志收集： http://peacetrue.cn:5601/
+* 链路中心： http://peacetrue.cn:9411/zipkin/
 * 配置中心： https://peacetrue.cn:8888/actuator/health
 * 注册中心： https://peacetrue.cn:8761
 * 认证授权中心： https://peacetrue.cn:8443/uaa
