@@ -33,7 +33,7 @@ spring:
     config:
       server:
         #默认分支，此处不需要转译，客户端需要转译成 dev(_)1.2.0(_)sleuth
-        default-label: dev/1.2.0/sleuth
+        default-label: local/1.2.0/sleuth
         git:
           #远程资源库地址
           uri: https://github.com/peacetrue/peacetrue-microservice-config-repo-template
