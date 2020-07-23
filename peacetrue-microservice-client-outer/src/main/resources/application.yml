@@ -35,19 +35,20 @@ gateway:
 spring.profiles.include: uaa
 management.endpoints.web.exposure.include: "*"
 
-logging.level.org.springframework: debug
-logging.level.com.github.peacetrue: debug
-
+logging.level.root: DEBUG
+#在项目内运行 java 的相对路径
+logging.config: file:peacetrue-microservice-common/logback-spring.xml
 ---
 
 spring.profiles: prod
-spring.profiles.include: https,log
+spring.profiles.include: https,fileLog,rabbitmqLog,cmd
 
 gateway.hostname: peacetrue.cn
 authorization-server.hostname: peacetrue.cn
+spring.rabbitmq.host: peacetrue.cn
+spring.zipkin.base-url: http://peacetrue.cn:9411/
 
-logging.level.org.springframework: info
-logging.level.com.github.peacetrue: info
+logging.level.root: INFO
 
 ---
 
@@ -65,10 +66,18 @@ server:
 authorization-server.port: 8443
 
 ---
-
-spring.profiles: log
+#默认输出到控制台，激活此配置切换到文件
+spring.profiles: fileLog
 
 logging.file.name: logs/root.log
+
+---
+#命令行
+spring.profiles: cmd
+
+# 通过命令行启动会在模块内运行
+logging.config: file:../peacetrue-microservice-common/logback-spring.xml
+
 
 ---
 #授权服务配置（UAA 完善的），默认使用 spring-security-oauth2，激活此配置使用 UAA
@@ -89,19 +98,3 @@ spring:
     port: 5672
     username: guest
     password: guest
-
----
-#通过 RabbitMQ 上传日志
-spring.profiles: 'rabbitmq & rabbitmqLog & default'
-
-#基于 java 命令执行路径
-logging.config: file:peacetrue-microservice-common/logback-spring.xml
-
----
-#通过 RabbitMQ 上传日志
-spring.profiles: 'rabbitmq & rabbitmqLog'
-
-#基于 java 命令执行路径
-logging.config: file:../peacetrue-microservice-common/logback-spring.xml
-
-
