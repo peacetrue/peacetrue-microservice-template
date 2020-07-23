@@ -32,12 +32,18 @@ gateway:
   hostname: localhost
   url: ${MICROSERVICE_PROTOCOL:http}://${gateway.hostname}
 
-spring.profiles.include: uaa
+spring.profiles.include: uaa,rabbitmq
 management.endpoints.web.exposure.include: "*"
 
 logging.level.root: DEBUG
 #在项目内运行 java 的相对路径
 logging.config: file:peacetrue-microservice-common/logback-spring.xml
+
+---
+#默认环境
+spring.profiles: default
+spring.profiles.include: consoleLog
+
 ---
 
 spring.profiles: prod
