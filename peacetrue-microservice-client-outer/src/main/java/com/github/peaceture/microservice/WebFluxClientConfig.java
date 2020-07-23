@@ -1,6 +1,7 @@
 package com.github.peaceture.microservice;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
@@ -31,13 +32,13 @@ public class WebFluxClientConfig {
     }
 
     @Bean
-    public WebClient.Builder webClientBuilder(ReactiveOAuth2AuthorizedClientManager authorizedClientManager,
-                                              @Value("${gateway.url}") String gatewayUrl) {
+    public WebClientCustomizer webClientCustomizer(ReactiveOAuth2AuthorizedClientManager authorizedClientManager,
+                                                   @Value("${gateway.url}") String gatewayUrl) {
         ServerOAuth2AuthorizedClientExchangeFilterFunction oauth =
                 new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
         oauth.setDefaultClientRegistrationId("peacetrue");
         oauth.setDefaultOAuth2AuthorizedClient(false);
-        return WebClient.builder()
+        return webClientBuilder -> webClientBuilder
                 .baseUrl(gatewayUrl)
                 .filter(oauth);
     }
