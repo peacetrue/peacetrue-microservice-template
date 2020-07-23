@@ -14,4 +14,4 @@ killbp 8005
 JAVA_OPTS="-server -Xmx256m -Xms256m -Xmn96m -Xss256k -Dlogging.config=$basePath/log4j2.properties -DUAA_CONFIG_PATH=$basePath/https" apache-tomcat-9.0.37/bin/startup.sh
 
 # http://localhost:8080/uaa/
-# https://peacetrue:8443/uaa/
+# https://peacetrue.cn:8443/uaa/
