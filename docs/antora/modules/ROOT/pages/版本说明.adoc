@@ -24,6 +24,12 @@
 . 日志收集
 . 链路追踪
 
+== v1.3.0
+
+版本特性：
+
+. 集成 https://github.com/codecentric/spring-boot-admin[spring-boot-admin^]
+
 == 待实现
 
 版本特性：
