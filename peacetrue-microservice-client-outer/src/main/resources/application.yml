@@ -80,3 +80,28 @@ authorization-server:
   jwkSetUri: ${MICROSERVICE_PROTOCOL:http}://${authorization-server.hostname}:${authorization-server.port}/uaa/token_keys
 
 
+---
+#消息总线通过 rabbitmq 发送消息
+spring.profiles: rabbitmq
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+---
+#通过 RabbitMQ 上传日志
+spring.profiles: 'rabbitmq & rabbitmqLog & default'
+
+#基于 java 命令执行路径
+logging.config: file:peacetrue-microservice-common/logback-spring.xml
+
+---
+#通过 RabbitMQ 上传日志
+spring.profiles: 'rabbitmq & rabbitmqLog'
+
+#基于 java 命令执行路径
+logging.config: file:../peacetrue-microservice-common/logback-spring.xml
+
+

@@ -8,21 +8,21 @@ spring:
         #配置中心允许读取环境仓库的配置
         bootstrap: true
 
-spring.profiles.include: rabbitmq
-#logging.level.com.github.peacetrue: debug applicationConfig
+---
+# 不支持 '!prod'，使用 default
+spring.profiles: default
+spring.profiles.include: native
 
 ---
-#默认情况未激活此项，原因不明。实际使用 bootstrap-default.yml 替代
-spring.profiles: default
-#使用本地文件需要包含 native
-spring.profiles.include: native
+#native：Spring 预定义的环境，使用本地文件需要包含 native
+spring.profiles: native
 spring:
   cloud:
     config:
       server:
         native:
-          #直接使用本地文件，避免检出 github 仓库，相对于 java 命令执行的路径
-          searchLocations: file:../peacetrue-microservice-config-repo-template
+          #直接使用本地文件，避免检出 github 仓库，相对于 java 命令执行的路径。相对路径 file:../peacetrue-microservice-config-repo-template 不支持
+          searchLocations: file:/Users/xiayx/Documents/Projects/peacetrue-microservice-config-repo-template
 
 ---
 #生产环境
@@ -32,8 +32,8 @@ spring:
   cloud:
     config:
       server:
-        #默认分支，此处不需要转译，客户端需要转译成 dev(_)1.1.0(_)config-sync
-        default-label: dev/1.1.0/config-sync
+        #默认分支，此处不需要转译，客户端需要转译成 dev(_)1.2.0(_)sleuth
+        default-label: dev/1.2.0/sleuth
         git:
           #远程资源库地址
           uri: https://github.com/peacetrue/peacetrue-microservice-config-repo-template

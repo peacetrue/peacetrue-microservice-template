@@ -1,0 +1,138 @@
+= 日志收集
+
+本文简单介绍如何在项目中集成日志收集。
+
+== 缘由
+
+每次看日志信息都需要登陆到远程服务器，会很麻烦，而且不同应用的日志需要切换到不同的日志文件，有时候还要联合多个日志文件查看请求涉及的所有信息。总结下来主要有 3 点问题：
+
+. 查看不便
+. 信息分散
+. 检索麻烦
+
+怎么解决呢？使用日志收集工具，将所有日志统一收集汇总分析，Spring 列举了两款日志收集工具：
+
+. https://www.elastic.co/products/kibana[Kibana^]
+. https://www.splunk.com/[Splunk^]
+
+笔者这里使用 Kibana 实现日志收集，Kibana 只做日志信息可视化，还需要使用到 https://www.elastic.co/cn/elasticsearch/[Elasticsearch^] 和 https://www.elastic.co/cn/logstash[Logstash^]，俗称 ELK。
+
+== 安装 ELK
+
+参考 https://github.com/deviantony/docker-elk[docker-elk^]，检出到本地后，修改 Logstash 配置：
+
+.learn-docker/composes/elk/logstash/config/logstash.yml
+[source%nowrap,conf]
+----
+#指定接收 logstash 队列中的所有消息
+input {
+	rabbitmq {
+	    host => "rabbitmq"
+	    port => 5672
+    	type => "logstash"
+	    exchange => "logger"
+	    exchange_type => "topic"
+	    key => "#"
+	    queue => "logstash"
+	    durable => true
+	}
+}
+----
+
+修改后内容已上传至 https://github.com/peacetrue/learn-docker[peacetrue-docker^]，可检出后与本项目配套使用。
+
+== 改造项目
+
+修改项目日志配置，输出日志到消息队列。添加 `logback-spring.xml` 配置文件，重要部分内容如下：
+
+.logback-spring.xml
+[source%nowrap,xml]
+----
+<appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
+    <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        <excludeMdcKeyName>rootLevel</excludeMdcKeyName>
+        <shortenedLoggerNameLength>36</shortenedLoggerNameLength>
+        <fieldNames>
+            <logger>class</logger>
+            <thread>thread</thread>
+        </fieldNames>
+    </encoder>
+
+
+    <host>${amqpHost}</host>
+    <port>${amqpPort}</port>
+    <username>${amqpUsername}</username>
+    <password>${amqpPassword}</password>
+    <durable>false</durable>
+    <deliveryMode>NON_PERSISTENT</deliveryMode>
+    <applicationId>${springAppName}</applicationId>
+    <generateId>true</generateId>
+
+    <charset>UTF-8</charset>
+</appender>
+<springProfile name="rabbitmqLog">
+    <root level="${rootLevel}">
+        <appender-ref ref="AMQP"/>
+    </root>
+    <!--很重要，DEBUG 级别会死循环。调用 RabbitTemplate 上传日志会记录 DEBUG 级别日志，记录日志又会触发上传日志 -->
+    <logger name="org.springframework.amqp.rabbit.core" level="INFO"/>
+</springProfile>
+----
+
+每个项目都需要使用这个配置文件，如果拷贝到各个项目会很麻烦。在远程仓库通过 `logging.config: file:peacetrue-microservice-common/logback-spring.xml` 统一指定。
+
+== 启动项目
+
+这里使用配置中心进行测试，启动应用后，会自动创建 `logger` 交换机：
+
+image::日志收集/消息交换机.png[]
+
+日志消息通过路由键 *应用名.类名.日志级别* 发送到 `logger` 交换机；Logstash 从 `logstash` 队列上接收所有消息，然后转发至 Elasticsearch；最后 Kibana 从 Elasticsearch 读取数据后进行展示。
+
+== 查看日志
+
+打开 Kibana 页面 http://localhost:5601 ，输入账号密码 elastic/changeme，查看日志信息：
+
+.kibana日志信息
+image::日志收集/kibana日志信息.png[]
+
+== 集成 Sleuth
+
+现在 Kibana 可以看到所有应用的日志信息，但不能查看某个特定请求footnode:[比如访问外部客户端的 /message 接口，外部客户端会调接口网关，接口网关再调用资源服务]相关的所有日志，需要通过 Sleuth 添加追踪信息。
+
+首先，在项目中添加 `org.springframework.cloud:spring-cloud-starter-sleuth` 依赖。重新启动项目后，日志信息如下：
+
+.root.log
+[source%nowrap,log]
+----
+2020-07-21 08:38:51.994  INFO [peacetrue-microservice-config-center,,,] 51465 --- [nio-8888-exec-9] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-07-21 08:38:52.026  INFO [peacetrue-microservice-config-center,,,] 51465 --- [nio-8888-exec-9] o.s.web.servlet.DispatcherServlet        : Completed initialization in 31 ms
+2020-07-21 08:39:14.502  INFO [peacetrue-microservice-config-center,8f3f9cab95d38edb,8f3f9cab95d38edb,false] 51465 --- [nio-8888-exec-3] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: file:/var/folders/1s/ly4n5ft11r19j6859j20mb380000gn/T/config-repo-4056814041444408501/application.yml (document #7)
+2020-07-21 08:39:14.502  INFO [peacetrue-microservice-config-center,8f3f9cab95d38edb,8f3f9cab95d38edb,false] 51465 --- [nio-8888-exec-3] o.s.c.c.s.e.NativeEnvironmentRepository  : Adding property source: file:/var/folders/1s/ly4n5ft11r19j6859j20mb380000gn/T/config-repo-4056814041444408501/application.yml (document #6)
+----
+
+在日志级别后面，会出现 `[appName,spanId,traceId,export]`：
+
+. appName：应用名
+. spanId：追踪内节点标识，没有为空
+. traceId：追踪标识，没有为空
+. export：是否上报到 Zipkin，目前没有集成 Zipkin，都是 false
+
+这是 Sleuth 提供的，有了这些信息，就可以将整个请求链条串起来。
+
+重新查看 Kibana：
+
+.重新查看 Kibana
+image::日志收集/重新查看Kibana.png[]
+
+现在通过 `trace` 过滤，就能查出整个请求涉及的相关日志。
+
+== 关于 logstash-logback-encoder
+
+参考 https://www.baeldung.com/java-application-logs-to-elastic-stack
+
+可以直接使用 `net.logstash.logback:logstash-logback-encoder:4.11` ，从日志文件中读取日志后上传到 Elasticsearch，不需要使用 RabbitMQ，也不需要单独部署 Logstash 服务，简化了流程。但需要每个项目配置类似的 `logback.conf`，`logback.conf` 中不能使用占位符footnote:[未经证实]，分环境配置也很麻烦，最终放弃。
+
+== 总结
+
+做完之后，发现用 https://sentry.io/[Sentry^] 更合适。ELK 主要是全文检索分析统计，如果只是汇总查看信息没必要。

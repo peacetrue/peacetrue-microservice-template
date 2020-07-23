@@ -20,6 +20,14 @@ subprojects { project ->
     sourceCompatibility = 9
     targetCompatibility = 9
 
+//    sourceSets {
+//        main {
+//            resources {
+//                srcDirs "src/main/resources", "../peacetrue-common"
+//            }
+//        }
+//    }
+
     repositories {
         mavenLocal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
@@ -33,6 +41,9 @@ subprojects { project ->
         imports {
             //自动使用最新版本
             mavenBom "com.github.peacetrue:peacetrue-dependencies:2+"
+        }
+        dependencies {
+            dependency 'net.logstash.logback:logstash-logback-encoder:6.4'
         }
     }
 

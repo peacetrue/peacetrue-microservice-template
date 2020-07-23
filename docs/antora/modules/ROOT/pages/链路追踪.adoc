@@ -1,0 +1,74 @@
+= 链路追踪
+
+本文简单介绍如何在项目中集成链路追踪。
+
+集成 xref:日志收集集成.adoc[] 之后，再做链路追踪就比较简单。
+
+== 部署 Zipkin 服务
+
+在项目中，添加 `peacetrue-microservice-zipkin` 模块，安装启动 https://github.com/openzipkin/zipkin[Zipkin^] 服务：
+
+[source%nowrap,shell]
+----
+$ cd peacetrue-microservice-zipkin
+$ curl -sSL https://zipkin.io/quickstart.sh | bash -s
+$ java -jar zipkin.jar
+----
+
+因为 zipkin.jar 比较大，没有放在项目中，使用时需要通过以上命令下载。
+
+WARNING: 官网推荐方式是通过 jar 运行，不要内嵌到本地项目运行。不能享受 Spring 统一配置很遗憾。
+
+打开 Zipkin 首页 http://localhost:9411 ，界面如下：
+
+.zipkin首页
+image::链路追踪/zipkin首页.png[]
+
+== 项目改造
+
+只需要添加 `org.springframework.cloud:spring-cloud-starter-zipkin` 依赖。
+
+== 测试效果
+
+访问外部客户端 `GET /message` 接口后，整个调用过程如下：
+
+.测试效果
+image::链路追踪/测试效果.png[]
+
+涉及到 3 个服务，4 次调用，总耗时约 668 毫秒。
+
+== 使用 Elasticsearch 存储数据
+
+Zipkin 默认使用内存存储，不适合生产环境使用，改为 Elasticsearch。在 xref:日志收集.adoc[] 中，已经安装好了 Elasticsearch，这里直接使用。
+
+首先，指定使用 elasticsearch 存储：
+
+[source%nowrap,shell]
+----
+$ STORAGE_TYPE=elasticsearch java -jar zipkin.jar
+----
+
+然后，配置 Elasticsearch 的相关参数 footnote:[详细参数看这里 https://github.com/openzipkin/zipkin/tree/master/zipkin-server#elasticsearch-storage]：
+
+[source%nowrap,shell]
+----
+#指定 Elasticsearch 的地址、用户名和密码
+$ STORAGE_TYPE=elasticsearch ES_HOSTS=http://localhost:9200 ES_USERNAME=peacetrue ES_PASSWORD=password java -jar zipkin.jar
+----
+
+TIP: 命令行指定参数太辛苦，怀念 Spring 的 YML 配置。
+//TODO 实现文件参数配置
+
+////
+
+== 使用 RabbitMQ 收集数据
+
+默认使用 HTTP 接口 `POST /api/{v1|v2}/spans` 收集数据，改为使用 RabbitMQ 收集：
+
+[source%nowrap,shell]
+----
+$ RABBIT_ADDRESSES=localhost java -jar zipkin.jar
+----
+
+////
+

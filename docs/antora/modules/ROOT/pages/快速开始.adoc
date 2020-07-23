@@ -27,6 +27,7 @@ image::快速开始/项目结构.png[]
 
 依次启动模块：
 
+. peacetrue-microservice-zipkin：9411
 . peacetrue-microservice-config-center：8888
 . peacetrue-microservice-registry-center：8761
 . peacetrue-microservice-uaa：8080
@@ -35,14 +36,23 @@ image::快速开始/项目结构.png[]
 . peacetrue-microservice-gateway：80
 . peacetrue-microservice-client-outer：8531
 
-peacetrue-microservice-uaa 需要部署到 Tomcat 启动（参考 xref:UAA安装部署.adoc[UAA安装部署]），其他模块都是从 `*Application` 类启动。如启动失败，请检查端口是否被占用。
+NOTE: 在启动模块前，需要先启动依赖的组件：Elasticsearch、RabbitMQ。
+
+启动方式说明：
+
+. peacetrue-microservice-zipkin 通过 peacetrue-microservice-zipkin/restart.sh 启动（参考 xref:链路追踪.adoc[链路追踪]）。
+. peacetrue-microservice-uaa 需要部署到 Tomcat 启动（参考 xref:UAA安装部署.adoc[UAA安装部署]）。
+. 其他模块都是从 `*Application` 类启动。如启动失败，请检查端口是否被占用。
 
 == 查看应用状态
 
-所有应用账号密码都是 peacetrue/password。
+所有应用账号密码，如无特殊说明都是：peacetrue/password。
 
 依次打开各个应用，查看运行情况：
 
+* http://localhost:5601/ ，账号密码：elastic/password
+* http://localhost:9411/zipkin/
+* http://localhost:5601/
 * http://localhost:8888/actuator/health
 * http://localhost:8761/actuator/health
 * http://localhost:8080/uaa
