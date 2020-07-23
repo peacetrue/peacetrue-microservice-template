@@ -29,7 +29,7 @@ input {
 	rabbitmq {
 	    host => "rabbitmq"
 	    port => 5672
-    	type => "logstash"
+	    type => "logstash"
 	    exchange => "logger"
 	    exchange_type => "topic"
 	    key => "#"
