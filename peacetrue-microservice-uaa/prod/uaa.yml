@@ -37,7 +37,7 @@ database:
   driverClassName: org.mariadb.jdbc.Driver
   url: jdbc:mysql://localhost:3306/uaa?autoreconnect=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
   username: root
-  password: 0tjoFwy4qp;R
+  password: 12345678
 
 #mysql commands that were run
 #create database uaa;
@@ -306,7 +306,7 @@ oauth:
 #        - https://url1.domain1.com/logout-success
 #        - https://url2.domain2.com/logout-success
 issuer:
-  uri: http://peacetrue.cn:8080/uaa
+  uri: https://peacetrue.cn:8443/uaa
 login:
   # Enable create account and forgot password links on the Login Server (enabled by default)
   #selfServiceLinksEnabled: true
@@ -360,7 +360,7 @@ login:
   #          - name: passcode
   #            type: password
   #            text: MyTemporary Authentication Code (Get on at /passcode)
-  url: http://peacetrue.cn:8080/uaa
+  url: https://peacetrue.cn:8443/uaa
   #  defaultIdentityProvider: uaa
   #  idpDiscoveryEnabled: true
   #  accountChooserEnabled: true
@@ -394,7 +394,7 @@ login:
 
   # SAML - The entity base url is the location of this application
   # (The host and port of the application that will accept assertions)
-  entityBaseURL: http://peacetrue.cn:8080/uaa
+  entityBaseURL: https://peacetrue.cn:8443/uaa
   # The entityID of this SP
   entityID: cloudfoundry-saml-login
   saml:
@@ -497,7 +497,7 @@ login:
   #END SAML PROVIDERS
 
   authorize:
-    url: http://peacetrue.cn:8080/uaa/oauth/authorize
+    url: https://peacetrue.cn:8443/uaa/oauth/authorize
 
 #  homeRedirect: http://example.com/
 
@@ -522,13 +522,13 @@ login:
 
 uaa:
   # The hostname of the UAA that this login server will connect to
-  url: http://peacetrue.cn:8080/uaa
+  url: https://peacetrue.cn:8443/uaa
   token:
-    url: http://peacetrue.cn:8080/uaa/oauth/token
+    url: https://peacetrue.cn:8443/uaa/oauth/token
   approvals:
-    url: http://peacetrue.cn:8080/uaa/approvals
+    url: https://peacetrue.cn:8443/uaa/approvals
   login:
-    url: http://peacetrue.cn:8080/uaa/authenticate
+    url: https://peacetrue.cn:8443/uaa/authenticate
   limitedFunctionality:
     enabled: false
     whitelist:
@@ -573,7 +573,7 @@ ldap:
 ---
 
 issuer:
-  uri: http://peacetrue.cn:8080/uaa
+  uri: https://peacetrue.cn:8443/uaa
 
 encryption:
   active_key_label: CHANGE-THIS-KEY
