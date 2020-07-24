@@ -1,6 +1,9 @@
 package com.github.peaceture.microservice;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.health.HealthEndpoint;
+import org.springframework.boot.actuate.info.InfoEndpoint;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.config.server.EnableConfigServer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,7 +31,13 @@ public class ConfigCenterApplication {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            super.configure(http);
+            http
+                    .authorizeRequests()
+                    .requestMatchers(EndpointRequest.to(HealthEndpoint.class, InfoEndpoint.class)).permitAll()
+                    .anyRequest().authenticated()
+                    .and().formLogin()
+                    .and().httpBasic();
+
             http.csrf(configurer -> configurer.ignoringAntMatchers("/monitor/**"));
         }
     }
