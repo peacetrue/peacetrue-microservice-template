@@ -9,7 +9,7 @@ spring:
         bootstrap: true
 
 ---
-# 不支持 '!prod'，使用 default
+# default，默认环境
 spring.profiles: default
 spring.profiles.include: native
 
@@ -32,8 +32,8 @@ spring:
   cloud:
     config:
       server:
-        #默认分支，此处不需要转译，客户端需要转译成 dev(_)1.2.0(_)sleuth
-        default-label: local/1.2.0/sleuth
+        #默认分支，此处不需要转译，客户端需要转译成 local(_)1.3.0(_)spring-boot-admin
+        default-label: local/1.3.0/spring-boot-admin
         git:
           #远程资源库地址
           uri: https://github.com/peacetrue/peacetrue-microservice-config-repo-template

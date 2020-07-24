@@ -16,13 +16,20 @@
 . 配置中心从远程仓库读取配置
 . 远程仓库配置修改后，实时同步受影响的应用
 
-== v1.2.0（实现中）
+== v1.2.0
 
 版本特性：
 
 . 集成 `Spring Cloud Sleuth`
 . 日志收集
 . 链路追踪
+
+== v1.3.0
+
+版本特性：
+
+. 集成 https://github.com/codecentric/spring-boot-admin[spring-boot-admin^]
+. 配置中不再使用负向配置，例如：`!prod` 表示非生产环境
 
 == 待实现
 
@@ -32,3 +39,8 @@
 . 集成 `Spring Cloud OpenFeign`
 . 集成 https://github.com/codecentric/spring-boot-admin[`spring-boot-admin`^]
 . 集成 `docker`
+. 单点登陆，所有应用都通过认证授权中心登陆
+
+== 待解决
+
+. 客户端在注册中心显示注册不上

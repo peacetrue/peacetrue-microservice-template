@@ -16,6 +16,9 @@
 
 package com.github.peaceture.microservice;
 
+import org.springframework.boot.actuate.autoconfigure.security.reactive.EndpointRequest;
+import org.springframework.boot.actuate.health.HealthEndpoint;
+import org.springframework.boot.actuate.info.InfoEndpoint;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -25,6 +28,7 @@ import org.springframework.security.core.userdetails.MapReactiveUserDetailsServi
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -33,16 +37,19 @@ public class WebFluxSecurityConfig {
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        http
-                .authorizeExchange(exchanges ->
-                        exchanges
-                                .pathMatchers(HttpMethod.GET, "/message/**")
-                                //TODO uaa include read by write
-                                .hasAnyAuthority("SCOPE_message.write", "SCOPE_message.read")
-                                .pathMatchers(HttpMethod.POST, "/message/**")
-                                .hasAuthority("SCOPE_message:write")
-                                .anyExchange().authenticated()
-                )
+        http.csrf().requireCsrfProtectionMatcher(new NegatedServerWebExchangeMatcher(EndpointRequest.toAnyEndpoint()));
+
+        http.authorizeExchange(exchanges ->
+                exchanges
+                        .matchers(EndpointRequest.to(HealthEndpoint.class, InfoEndpoint.class)).permitAll()
+                        //TODO uaa include read by write
+                        .pathMatchers(HttpMethod.GET, "/message/**")
+                        .hasAnyAuthority("SCOPE_message.write", "SCOPE_message.read")
+                        .pathMatchers(HttpMethod.POST, "/message/**")
+                        .hasAuthority("SCOPE_message:write")
+                        .anyExchange().authenticated()
+        )
+                .httpBasic(withDefaults())
                 .formLogin(withDefaults())
                 .oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(withDefaults()));
         return http.build();

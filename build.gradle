@@ -44,10 +44,13 @@ subprojects { project ->
         }
         dependencies {
             dependency 'net.logstash.logback:logstash-logback-encoder:6.4'
+            dependency 'de.codecentric:spring-boot-admin-starter-server:2+'//2.3.0-SNAPSHOT
+            //dependency 'de.codecentric:spring-boot-admin-starter-client:2+'
         }
     }
 
     dependencies {
+
         compileOnly "org.projectlombok:lombok"
         annotationProcessor "org.projectlombok:lombok"
         implementation("com.google.code.findbugs:jsr305")

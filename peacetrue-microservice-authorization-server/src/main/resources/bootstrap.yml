@@ -4,7 +4,7 @@ spring:
   cloud:
     config:
       uri: ${MICROSERVICE_PROTOCOL:http}://${MICROSERVICE_SECURITY_USERNAME:peacetrue}:${MICROSERVICE_SECURITY_PASSWORD:password}@${MICROSERVICE_CONFIG_HOST:localhost}:${MICROSERVICE_CONFIG_PORT:8888}
-      label: local(_)1.2.0(_)sleuth
+      label: local(_)1.3.0(_)spring-boot-admin
       fail-fast: true
 
 ---
