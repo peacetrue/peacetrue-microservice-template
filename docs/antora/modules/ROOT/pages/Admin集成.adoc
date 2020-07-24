@@ -2,30 +2,60 @@
 
 本文简单介绍在项目中集成 https://github.com/codecentric/spring-boot-admin[spring-boot-admin]。
 
-spring-boot-admin 可简单理解为一个 UI 组件，提供 `Endpoint` 接口数据的界面展示。
+SBA(**s**pring-**b**oot-**a**dmin) 可简单理解为一个 UI 组件，提供 `Endpoint` 接口数据的界面展示。
 
-== 项目改造
+== 创建项目
 
 创建 `peacetrue-microservice-admin-server` 项目，作为 eureka 客户端。然后添加依赖 `implementation 'de.codecentric:spring-boot-admin-starter-server:2.3.0-SNAPSHOT'`，作为 admin 服务端。
 
-因为服务端会调用客户端的 `Endpoint` 接口获取数据，所以客户端安全认证需要配置忽略 CSRF 验证：
+== 改造 Spring Security
 
+//因为服务端会调用客户端的 `Endpoint` 接口获取数据，所以客户端安全认证需要配置忽略 CSRF 验证：
+
+Spring Security 默认的登陆页面如下：
+
+.默认的登陆页面
+image::admin集成/默认的登陆页面.png[]
+
+参考 https://codecentric.github.io/spring-boot-admin/current/#_securing_spring_boot_admin_server[SBA官方文档^] 实现的 Reactive 版本：
+
+.WebFluxSecurityConfig
 [source%nowrap,java]
 ----
 @Bean
-public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-    //忽略 CSRF 验证
-    http.csrf().requireCsrfProtectionMatcher(new NegatedServerWebExchangeMatcher(EndpointRequest.toAnyEndpoint()));
-    http.authorizeExchange(exchanges ->
-            exchanges
-                    .matchers(EndpointRequest.to(HealthEndpoint.class, InfoEndpoint.class)).permitAll()
-                    .anyExchange().authenticated()
-    )
-            .httpBasic(withDefaults())
-            .formLogin(withDefaults());
+public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http,
+                                                        AdminServerProperties adminServer) {
+    http.authorizeExchange(exchanges -> exchanges
+            .matchers(EndpointRequest.to(HealthEndpoint.class, InfoEndpoint.class)).permitAll()
+            .pathMatchers(adminServer.path("/assets/**")).permitAll()
+            .pathMatchers(adminServer.path("/login")).permitAll()
+            .anyExchange().authenticated()
+    );
+    http.formLogin()
+            .loginPage(adminServer.path("/login"))
+            .authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler(adminServer.path("/")));
+    http.logout().logoutUrl(adminServer.path("/logout"));
+    http.httpBasic(withDefaults());
+    http.csrf().csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
+            .requireCsrfProtectionMatcher(new AndServerWebExchangeMatcher(
+                    CsrfWebFilter.DEFAULT_CSRF_MATCHER,
+                    new NegatedServerWebExchangeMatcher(EndpointRequest.toAnyEndpoint()),
+                    new NegatedServerWebExchangeMatcher(ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, adminServer.path("/instances"))),
+                    new NegatedServerWebExchangeMatcher(ServerWebExchangeMatchers.pathMatchers(HttpMethod.DELETE, adminServer.path("/instances/*"))),
+                    new NegatedServerWebExchangeMatcher(ServerWebExchangeMatchers.pathMatchers(adminServer.path("/actuator/*")))
+            ));
     return http.build();
 }
 ----
+
+改造后，SBA 的登陆页面如下：
+
+.SBA登陆页面
+image::admin集成/SBA登陆页面.png[]
+
+登陆后会提示 *CSRF Token has been associated to this client*，原因是 `CsrfWebFilter` 配合 `CookieServerCsrfTokenRepository` 设置 Cookie 存在 BUG footnote:[https://github.com/spring-projects/spring-security/issues/5766]。
+
+忽略登陆的 CSRF 拦截后，可以正常登陆，但还是有其他功能受影响，所以直接禁用 CSRF：`http.csrf().disable();`。
 
 == 效果展示
 
@@ -38,8 +68,7 @@ image::admin集成/应用列表.png[]
 .内存使用情况
 image::admin集成/内存使用情况.png[]
 
-笔者目前觉得，这个内存使用情况是里面最棒的功能。
+.修改日志级别
+image::admin集成/modify-log-leve.png[]
 
-== 优化
-
-* 集成 admin 的登陆页面，目前使用 security 自带的登陆页
+修改日志级别这个功能很好用。

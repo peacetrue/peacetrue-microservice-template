@@ -91,6 +91,12 @@
             <appender-ref ref="AMQP"/>
         </springProfile>
     </root>
+    <!--如果没有启用控制台日志，还是让它在 error 时输出，error 可能导致其他类型日志没有启用，此时看不到日志-->
+    <springProfile name="!consoleLog">
+        <root level="error">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
 
     <springProfile name="rabbitmqLog">
         <!--很重要，DEBUG 级别会死循环。调用 RabbitTemplate 上传日志会记录 DEBUG 级别日志，记录日志又会触发上传日志 -->

@@ -16,7 +16,7 @@ killbp 8005
 [ "$env" == "prod" ] && logPath="$basePath/prod" && configPath="$basePath/prod"
 [ "$env" == "4prod" ] && logPath="$basePath" && configPath="$basePath/prod"
 echo "$logPath | $configPath"
-JAVA_OPTS="-server -Xmx256m -Xms256m -Xmn96m -Xss256k -Dlogging.config=$basePath/log4j2.properties -DUAA_CONFIG_PATH=$basePath" apache-tomcat-9.0.37/bin/startup.sh
+JAVA_OPTS="-server -Xmx256m -Xms256m -Xmn96m -Xss256k -Dlogging.config=$logPath/log4j2.properties -DUAA_CONFIG_PATH=$configPath" apache-tomcat-9.0.37/bin/startup.sh
 
 # http://localhost:8080/uaa/
 # https://peacetrue.cn:8443/uaa/

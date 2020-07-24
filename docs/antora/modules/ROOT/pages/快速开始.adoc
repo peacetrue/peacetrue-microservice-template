@@ -31,6 +31,7 @@ image::快速开始/项目结构.png[]
 . peacetrue-microservice-config-center：8888
 . peacetrue-microservice-registry-center：8761
 . peacetrue-microservice-uaa：8080
+. peacetrue-microservice-admin-server：8500
 . peacetrue-microservice-resource-server：8520
 . peacetrue-microservice-client-inner：8530
 . peacetrue-microservice-gateway：80
@@ -56,6 +57,7 @@ NOTE: 在启动模块前，需要先启动依赖的组件：Elasticsearch、Rabb
 * http://localhost:8888/actuator/health
 * http://localhost:8761/actuator/health
 * http://localhost:8080/uaa
+* http://localhost:8500/actuator/health
 * http://localhost:8520/actuator/health
 * http://localhost:8530/actuator/health
 * http://localhost/actuator/health
