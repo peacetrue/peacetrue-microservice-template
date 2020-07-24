@@ -34,6 +34,8 @@ gateway:
 
 spring.profiles.include: uaa,rabbitmq
 management.endpoints.web.exposure.include: "*"
+# 默认禁用 zipkin
+spring.zipkin.enabled: false
 
 logging.level.root: DEBUG
 #在项目内运行 java 的相对路径
@@ -47,7 +49,7 @@ spring.profiles.include: consoleLog
 ---
 
 spring.profiles: prod
-spring.profiles.include: https,fileLog,rabbitmqLog,cmd
+spring.profiles.include: https,fileLog,rabbitmqLog,cmd,zipkin
 
 gateway.hostname: peacetrue.cn
 authorization-server.hostname: peacetrue.cn
@@ -70,6 +72,11 @@ server:
     key-store-password: ${MICROSERVICE_SSL_PASSWORD:password}
 
 authorization-server.port: 8443
+
+---
+#zipkin，默认禁用，激活此项以启用
+spring.profiles: zipkin
+spring.zipkin.enabled: true
 
 ---
 #默认输出到控制台，激活此配置切换到文件

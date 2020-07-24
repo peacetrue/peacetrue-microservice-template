@@ -1,0 +1,45 @@
+= Spring Boot Admin 集成
+
+本文简单介绍在项目中集成 https://github.com/codecentric/spring-boot-admin[spring-boot-admin]。
+
+spring-boot-admin 可简单理解为一个 UI 组件，提供 `Endpoint` 接口数据的界面展示。
+
+== 项目改造
+
+创建 `peacetrue-microservice-admin-server` 项目，作为 eureka 客户端。然后添加依赖 `implementation 'de.codecentric:spring-boot-admin-starter-server:2.3.0-SNAPSHOT'`，作为 admin 服务端。
+
+因为服务端会调用客户端的 `Endpoint` 接口获取数据，所以客户端安全认证需要配置忽略 CSRF 验证：
+
+[source%nowrap,java]
+----
+@Bean
+public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    //忽略 CSRF 验证
+    http.csrf().requireCsrfProtectionMatcher(new NegatedServerWebExchangeMatcher(EndpointRequest.toAnyEndpoint()));
+    http.authorizeExchange(exchanges ->
+            exchanges
+                    .matchers(EndpointRequest.to(HealthEndpoint.class, InfoEndpoint.class)).permitAll()
+                    .anyExchange().authenticated()
+    )
+            .httpBasic(withDefaults())
+            .formLogin(withDefaults());
+    return http.build();
+}
+----
+
+== 效果展示
+
+.应用墙
+image::admin集成/应用墙.png[]
+
+.应用列表
+image::admin集成/应用列表.png[]
+
+.内存使用情况
+image::admin集成/内存使用情况.png[]
+
+笔者目前觉得，这个内存使用情况是里面最棒的功能。
+
+== 优化
+
+* 集成 admin 的登陆页面，目前使用 security 自带的登陆页

@@ -9,7 +9,7 @@ spring:
         bootstrap: true
 
 ---
-# default
+# default，默认环境
 spring.profiles: default
 spring.profiles.include: native
 

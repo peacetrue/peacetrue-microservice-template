@@ -79,8 +79,8 @@ logging.level.org.springframework: debug
 logging.level.com.github.peacetrue: debug
 
 ---
-#非生产环境
-spring.profiles: '!prod'
+#默认环境，开发环境
+spring.profiles: default
 #使用本地文件需要包含 native
 spring.profiles.include: native
 spring:
