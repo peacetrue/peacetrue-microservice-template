@@ -13,7 +13,7 @@ v1.3.0, 2020-07-25: SNAPSHOT
 * https://github.com/codecentric/spring-boot-admin[Admin] 服务端： https://peacetrue.cn:8500
 * 认证授权中心： https://peacetrue.cn:8443/uaa
 * 资源服务： https://peacetrue.cn:8520
-* 内部客户端： https://peacetrue.cn:8530
+* 内部客户端： https://peacetrue.cn:8530/login
 * 接口网关： https://peacetrue.cn
 * 外部客户端： https://peacetrue.cn:8531
 
