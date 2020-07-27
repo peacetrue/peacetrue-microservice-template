@@ -35,12 +35,9 @@
 
 版本特性：
 
+. 集成 Devops
 . 集成 `Spring Cloud Circuit Breaker`
 . 集成 `Spring Cloud OpenFeign`
 . 集成 https://github.com/codecentric/spring-boot-admin[`spring-boot-admin`^]
 . 集成 `docker`
 . 单点登陆，所有应用都通过认证授权中心登陆
-
-== 待解决
-
-. 客户端在注册中心显示注册不上
