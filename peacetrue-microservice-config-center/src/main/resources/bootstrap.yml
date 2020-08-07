@@ -32,8 +32,8 @@ spring:
   cloud:
     config:
       server:
-        #默认分支，此处不需要转译，客户端需要转译成 local(_)1.3.0(_)spring-boot-admin
-        default-label: local/1.3.0/spring-boot-admin
+        #默认分支，此处不需要转译，客户端需要转译成 local(_)latest
+        default-label: local/latest
         git:
           #远程资源库地址
           uri: https://github.com/peacetrue/peacetrue-microservice-config-repo-template
