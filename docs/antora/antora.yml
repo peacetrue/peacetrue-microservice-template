@@ -1,6 +1,6 @@
 name: peacetrue-microservice-template
 title: 安宁微服务
-version: dev(_)1.3.0(_)spring-boot-admin
+version: dev(_)latest
 asciidoc:
   attributes:
     numbered: ''
