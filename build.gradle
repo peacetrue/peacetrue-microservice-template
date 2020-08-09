@@ -82,6 +82,10 @@ subprojects { project ->
             //上传到阿里云镜像仓库
             image = "registry.cn-beijing.aliyuncs.com/peacetrue/$name"
             tags = [/*version,*/ 'latest']
+            auth {
+                username = "18618262909"
+                password = "1234560O"
+            }
         }
 
         container {
