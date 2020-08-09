@@ -4,7 +4,7 @@ spring:
   cloud:
     config:
       uri: ${MICROSERVICE_PROTOCOL:http}://${MICROSERVICE_SECURITY_USERNAME:peacetrue}:${MICROSERVICE_SECURITY_PASSWORD:password}@${MICROSERVICE_CONFIG_HOST:localhost}:${MICROSERVICE_CONFIG_PORT:8888}
-      label: dev(_)latest
+      #label: dev(_)latest
       fail-fast: true
   security:
     oauth2:
@@ -20,7 +20,7 @@ spring:
 ---
 
 spring.profiles: prod
-spring.profiles.include: https
+#spring.profiles.include: https
 
 MICROSERVICE_CONFIG_HOST: peacetrue.cn
 

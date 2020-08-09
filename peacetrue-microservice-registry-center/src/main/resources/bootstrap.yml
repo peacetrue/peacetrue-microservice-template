@@ -6,13 +6,13 @@ spring:
     config:
       #配置中心地址
       uri: ${MICROSERVICE_PROTOCOL:http}://${MICROSERVICE_SECURITY_USERNAME:peacetrue}:${MICROSERVICE_SECURITY_PASSWORD:password}@${MICROSERVICE_CONFIG_HOST:localhost}:${MICROSERVICE_CONFIG_PORT:8888}
-      label: dev(_)latest
+      #label: dev(_)1.4.0(_)docker
       fail-fast: true
 
 ---
 #生产环境
 spring.profiles: prod
-spring.profiles.include: https
+#spring.profiles.include: https
 
 MICROSERVICE_CONFIG_HOST: peacetrue.cn
 

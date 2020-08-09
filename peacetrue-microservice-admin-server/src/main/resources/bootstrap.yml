@@ -10,7 +10,7 @@ spring:
 ---
 
 spring.profiles: prod
-spring.profiles.include: https
+#spring.profiles.include: https
 
 MICROSERVICE_CONFIG_HOST: peacetrue.cn
 

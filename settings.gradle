@@ -2,7 +2,7 @@ rootProject.name = "peacetrue-microservice-template"
 include("peacetrue-microservice-config-center")
 include("peacetrue-microservice-registry-center")
 include("peacetrue-microservice-gateway")
-include("peacetrue-microservice-authorization-server")
+//include("peacetrue-microservice-authorization-server")
 include("peacetrue-microservice-resource-server")
 include("peacetrue-microservice-client-inner")
 include("peacetrue-microservice-client-outer")
