@@ -1,9 +1,14 @@
 pipeline {
     agent any
     stages {
-        stage('build') {
+        stage('show where are you') {
             steps {
                 echo pwd()
+            }
+        }
+        stage('build docker image') {
+            steps {
+                sh './gradlew jibDockerBuild'
             }
         }
     }
