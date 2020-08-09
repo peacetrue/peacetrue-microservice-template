@@ -80,7 +80,8 @@ subprojects { project ->
 
         to {
             //上传到阿里云镜像仓库
-            image = "registry.cn-beijing.aliyuncs.com/peacetrue/$name"
+            //image = "registry.cn-beijing.aliyuncs.com/peacetrue/$name"
+            image = "registry-vpc.cn-beijing.aliyuncs.com/peacetrue/$name"
             tags = [/*version,*/ 'latest']
             auth {
                 username = "18618262909"
