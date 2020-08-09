@@ -8,7 +8,7 @@ pipeline {
         }
         stage('build docker image') {
             steps {
-                sh './gradlew ${moduleName}:jibDockerBuild'
+                sh './gradlew ${moduleName}:jib'
             }
         }
     }
