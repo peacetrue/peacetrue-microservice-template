@@ -72,16 +72,16 @@ subprojects { project ->
 
     jib {
         from {
-            //使用本地镜像
-//            image = "docker://openjdk:11.0.8-jre"
+            //使用本地镜像，依赖本地 docker
+            image = "docker://openjdk:11.0.8-jre"
             //速度慢
-            image = "registry://docker.io/library/openjdk:11.0.8-jre"
+//            image = "registry://docker.io/library/openjdk:11.0.8-jre"
         }
 
         to {
             //上传到阿里云镜像仓库
-            //image = "registry.cn-beijing.aliyuncs.com/peacetrue/$name"
-            image = "registry-vpc.cn-beijing.aliyuncs.com/peacetrue/$name"
+            image = "registry.cn-beijing.aliyuncs.com/peacetrue/$name"
+            //image = "registry-vpc.cn-beijing.aliyuncs.com/peacetrue/$name"
             tags = [/*version,*/ 'latest']
             auth {
                 username = "18618262909"
