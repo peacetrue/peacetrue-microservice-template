@@ -22,7 +22,7 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://peacetrue.cn:8888/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://www.peacetrue.cn:8888/actuator/health"]
       interval: 5s
       timeout: 5s
       retries: 3
@@ -48,7 +48,7 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://peacetrue.cn:8761/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://www.peacetrue.cn:8761/actuator/health"]
       interval: 5s
       timeout: 5s
       retries: 3
