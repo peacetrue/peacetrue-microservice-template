@@ -23,5 +23,6 @@ node {
   echo "pwd()"
 
   stage 'build docker image'
-  sh './gradlew ${moduleName}:jibDockerBuild --stacktrace'
+  sh 'docker ps'
+//   sh './gradlew ${moduleName}:jibDockerBuild --stacktrace'
 }
