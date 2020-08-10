@@ -1,11 +1,15 @@
 pipeline {
     agent any
+    tools {
+        docker 'latest'
+    }
     stages {
         stage('show where are you') {
             steps {
                 echo pwd()
             }
         }
+
         stage('build docker image') {
             steps {
                 //sh './gradlew ${moduleName}:jib'
