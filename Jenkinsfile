@@ -1,6 +1,5 @@
-/*
 pipeline {
-    agent any
+    agent { docker 'docker'}
     stages {
         stage('show where are you') {
             steps {
@@ -16,13 +15,4 @@ pipeline {
         }
     }
 }
- */
 
-node {
-  stage 'show where are you'
-  echo "pwd()"
-
-  stage 'build docker image'
-  sh './Jenkinsfile.sh'
-//   sh './gradlew ${moduleName}:jibDockerBuild --stacktrace'
-}
