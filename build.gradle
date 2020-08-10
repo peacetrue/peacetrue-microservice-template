@@ -73,9 +73,9 @@ subprojects { project ->
     jib {
         from {
             //使用本地镜像，依赖本地 docker
-            image = "docker://openjdk:11.0.8-jre"
+//            image = "docker://openjdk:11.0.8-jre"
             //速度慢
-//            image = "registry://docker.io/library/openjdk:11.0.8-jre"
+            image = "registry://docker.io/library/openjdk:11.0.8-jre"
         }
 
         to {
@@ -90,8 +90,9 @@ subprojects { project ->
         }
 
         container {
-            environment = ['SPRING_PROFILES_ACTIVE': 'prod']
-            jvmFlags = ['-Xmx128m', '-Xms128m', '-Xmn96m', '-Xss256k']
+            //环境变量 docker 启动时指定
+            //environment = ['SPRING_PROFILES_ACTIVE': 'prod']
+            jvmFlags = ['-Xmx256m', '-Xms128m', '-Xmn96m', '-Xss256k']
             //CMD [jib.container.args]
             //args = ['--spring.profiles.active=prod']
             creationTime = 'USE_CURRENT_TIMESTAMP'
