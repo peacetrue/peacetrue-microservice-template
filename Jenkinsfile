@@ -19,7 +19,9 @@ pipeline {
 
         stage('run docker image') {
             steps {
-                sh 'cd peacetrue-microservice-docker && docker-compose --env-file=.env-file.prod up -d ${moduleName}'
+                sh 'cd peacetrue-microservice-docker'
+                sh 'docker-compose --env-file=.env-file.prod down ${moduleName}'
+                sh 'docker-compose --env-file=.env-file.prod up -d ${moduleName}'
             }
         }
     }
