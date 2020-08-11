@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        dockerTool 'latest'
+        dockerTool 'docker'
     }
     stages {
         stage('show where are you') {
