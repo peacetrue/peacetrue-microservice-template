@@ -17,8 +17,8 @@ services:
     volumes:
       - ./peacetrue-microservice-config-center/logs:/app/logs
       #- ${volumes_ssl}
-      - ${volumes_localtime}
-      - ${volumes_timezone}
+#      - ${volumes_localtime}
+#      - ${volumes_timezone}
     ports:
       - "8888:8888"
     healthcheck:
