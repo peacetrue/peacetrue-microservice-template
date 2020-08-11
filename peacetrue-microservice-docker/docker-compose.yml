@@ -17,8 +17,8 @@ services:
     volumes:
       - ./peacetrue-microservice-config-center/logs:/app/logs
       #- ${volumes_ssl}
-#      - ${volumes_localtime}
-#      - ${volumes_timezone}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
     ports:
       - "8888:8888"
     healthcheck:
@@ -43,8 +43,8 @@ services:
       #      - ../peacetrue-microservice-registry-center/build/libs/peacetrue-microservice-registry-center-1.0.0-SNAPSHOT.jar:/app.jar
       - ./peacetrue-microservice-registry-center/logs:/app/logs
       #- ${volumes_ssl}
-      - ${volumes_localtime}
-      - ${volumes_timezone}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
     ports:
       - "8761:8761"
     healthcheck:
@@ -70,8 +70,8 @@ services:
       #      - ../peacetrue-microservice-admin-server/build/libs/peacetrue-microservice-admin-server-1.0.0-SNAPSHOT.jar:/app.jar
       - ./peacetrue-microservice-admin-server/logs:/app/logs
       #- ${volumes_ssl}
-      - ${volumes_localtime}
-      - ${volumes_timezone}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
     #    expose:
     #      - 8500
     ports:
@@ -95,8 +95,8 @@ services:
       #      - ../peacetrue-microservice-gateway/build/libs/peacetrue-microservice-gateway-1.0.0-SNAPSHOT.jar:/app.jar
       - ./peacetrue-microservice-gateway/logs:/app/logs
       #- ${volumes_ssl}
-      - ${volumes_localtime}
-      - ${volumes_timezone}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
     #    expose:
     #      - 80
     ports:
@@ -120,8 +120,8 @@ services:
       #      - ../peacetrue-microservice-resource-server/build/libs/peacetrue-microservice-resource-server-1.0.0-SNAPSHOT.jar:/app.jar
       - ./peacetrue-microservice-resource-server/logs:/app/logs
       #- ${volumes_ssl}
-      - ${volumes_localtime}
-      - ${volumes_timezone}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
     #    expose:
     #      - 8520
     ports:
@@ -145,8 +145,8 @@ services:
       #      - ../peacetrue-microservice-client-inner/build/libs/peacetrue-microservice-client-inner-1.0.0-SNAPSHOT.jar:/app.jar
       - ./peacetrue-microservice-client-inner/logs:/app/logs
       #- ${volumes_ssl}
-      - ${volumes_localtime}
-      - ${volumes_timezone}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
     #    expose:
     #      - 8530
     ports:
@@ -170,8 +170,8 @@ services:
       #      - ../peacetrue-microservice-client-outer/build/libs/peacetrue-microservice-client-outer-1.0.0-SNAPSHOT.jar:/app.jar
       - ./peacetrue-microservice-client-outer/logs:/app/logs
       #- ${volumes_ssl}
-      - ${volumes_localtime}
-      - ${volumes_timezone}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
     #    expose:
     #      - 8531
     ports:
