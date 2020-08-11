@@ -13,9 +13,13 @@ pipeline {
         stage('build docker image') {
             steps {
                 //sh './gradlew ${moduleName}:jib'
-                //在本地 docker 构建镜像
-                //sh 'docker pull openjdk:11.0.8-jre'
                 sh './gradlew ${moduleName}:jibDockerBuild'
+            }
+        }
+
+        stage('run docker image') {
+            steps {
+                sh 'cd peacetrue-microservice-docker && docker-compose --env-file=.env-file.prod up -d ${moduleName}'
             }
         }
     }

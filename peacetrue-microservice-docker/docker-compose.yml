@@ -185,19 +185,14 @@ services:
         condition: service_healthy
     #entrypoint: java -jar app.jar ${JAR_ENV}
 
+#本地 mac
+# docker-compose --env-file=.env-file.mac
+#生产
+# docker-compose --env-file=.env-file.prod
+
 # docker network create peacetrue-microservice
 # docker-compose up -d
-# docker-compose up -d --env-file=.env
-# docker-compose up -d --env-file mac.env
-# docker-compose --env-file=mac.env up -d
-# docker-compose --env-file=.env up
 # docker-compose down
 # docker-compose config
-# docker-compose --env-file=.env-file.mac config
-# docker-compose --env-file=.env-file.mac rm
-# docker-compose --env-file=.env config
-# docker-compose start peacetrue-microservice-gateway
-# docker-compose stop peacetrue-microservice-gateway
-# ./gradlew peacetrue-microservice-admin-server:jibDockerBuild
-# ./gradlew jibDockerBuild
-# docker-compose --env-file=.env-file.mac restart peacetrue-microservice-admin-server
+# docker-compose --env-file=.env-file.mac up -d peacetrue-microservice-config-center
+# docker-compose --env-file=.env-file.prod up -d peacetrue-microservice-config-center
