@@ -35,7 +35,7 @@ services:
     hostname: peacetrue-microservice-registry-center
     #build: peacetrue-microservice-registry-center
     image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-registry-center:latest
-    restart: no
+    #restart: always
     privileged: true
     env_file:
       - .env.${ENV}
@@ -64,7 +64,7 @@ services:
     hostname: peacetrue-microservice-admin-server
     #    build: peacetrue-microservice-admin-server
     image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-admin-server:latest
-    restart: no
+    #restart: always
     privileged: true
     volumes:
       #      - ../peacetrue-microservice-admin-server/build/libs/peacetrue-microservice-admin-server-1.0.0-SNAPSHOT.jar:/app.jar
@@ -89,7 +89,7 @@ services:
     hostname: peacetrue-microservice-gateway
     #    build: peacetrue-microservice-gateway
     image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-gateway:latest
-    restart: no
+    #restart: always
     privileged: true
     volumes:
       #      - ../peacetrue-microservice-gateway/build/libs/peacetrue-microservice-gateway-1.0.0-SNAPSHOT.jar:/app.jar
@@ -114,7 +114,7 @@ services:
     hostname: peacetrue-microservice-resource-server
     #    build: peacetrue-microservice-resource-server
     image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-resource-server:latest
-    restart: no
+    #restart: always
     privileged: true
     volumes:
       #      - ../peacetrue-microservice-resource-server/build/libs/peacetrue-microservice-resource-server-1.0.0-SNAPSHOT.jar:/app.jar
@@ -139,7 +139,7 @@ services:
     hostname: peacetrue-microservice-client-inner
     #    build: peacetrue-microservice-client-inner
     image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-client-inner:latest
-    restart: no
+    #restart: always
     privileged: true
     volumes:
       #      - ../peacetrue-microservice-client-inner/build/libs/peacetrue-microservice-client-inner-1.0.0-SNAPSHOT.jar:/app.jar
@@ -164,7 +164,7 @@ services:
     hostname: peacetrue-microservice-client-outer
     #    build: peacetrue-microservice-client-outer
     image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-client-outer:latest
-    restart: no
+    #restart: always
     privileged: true
     volumes:
       #      - ../peacetrue-microservice-client-outer/build/libs/peacetrue-microservice-client-outer-1.0.0-SNAPSHOT.jar:/app.jar
