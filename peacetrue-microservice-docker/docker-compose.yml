@@ -10,7 +10,7 @@ services:
     container_name: peacetrue-microservice-config-center
     hostname: peacetrue-microservice-config-center
     image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-config-center:latest
-    restart: no
+    #restart: always
     privileged: true
     env_file:
       - .env.${ENV}
