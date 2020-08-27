@@ -6,6 +6,7 @@ v1.3.0, 2020-07-25: SNAPSHOT
 
 *线上演示地址如下*：
 
+.https：
 * ELK 日志收集： http://peacetrue.cn:5601 ，账号密码：elastic/password
 * Zipkin 链路中心： http://peacetrue.cn:9411/zipkin
 * 配置中心： https://peacetrue.cn:8888
@@ -16,6 +17,18 @@ v1.3.0, 2020-07-25: SNAPSHOT
 * 内部客户端： https://peacetrue.cn:8530/login
 * 接口网关： https://peacetrue.cn
 * 外部客户端： https://peacetrue.cn:8531
+
+.http：
+* ELK 日志收集： http://peacetrue.cn:5601 ，账号密码：elastic/password
+* Zipkin 链路中心： http://peacetrue.cn:9411/zipkin
+* 配置中心： http://www.peacetrue.cn:8888
+* 注册中心： http://www.peacetrue.cn:8761
+* https://github.com/codecentric/spring-boot-admin[Admin] 服务端： http://www.peacetrue.cn:8500
+* 认证授权中心： http://www.peacetrue.cn:8443/uaa
+* 资源服务： http://www.peacetrue.cn:8520
+* 内部客户端： http://www.peacetrue.cn:8530/login
+* 接口网关： http://www.peacetrue.cn
+* 外部客户端： http://www.peacetrue.cn:8531
 
 如无特殊说明，所有应用账号密码都是：peacetrue/password。
 

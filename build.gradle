@@ -83,7 +83,7 @@ subprojects { project ->
         from {
             //使用本地镜像，依赖本地 docker
             image = "docker://openjdk:11.0.8-jre"
-            //速度慢
+            //使用仓库镜像，速度慢
             //image = "registry://docker.io/library/openjdk:11.0.8-jre"
         }
 
