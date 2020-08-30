@@ -4,18 +4,30 @@ spring:
   cloud:
     config:
       uri: ${MICROSERVICE_PROTOCOL:http}://${MICROSERVICE_SECURITY_USERNAME:peacetrue}:${MICROSERVICE_SECURITY_PASSWORD:password}@${MICROSERVICE_CONFIG_HOST:localhost}:${MICROSERVICE_CONFIG_PORT:8888}
-      #label: dev(_)latest
       fail-fast: true
   security:
     oauth2:
       client:
+        provider:
+          spring:
+            #            issuerUri: ${authorization-server.issuerUri}
+            jwkSetUri: ${authorization-server.jwkSetUri}
+            authorization-uri: ${authorization-server.issuerUri}/oauth2/authorize
+            token-uri: ${authorization-server.issuerUri}/oauth2/token
         registration:
-          peacetrue:
+          client-inner-authorization-code:
+            provider: spring
             client-id: peacetrue
             client-secret: password
-            #TODO 如果设置多种类型，如何选择哪一种
             authorization-grant-type: authorization_code
-            scope: openid,message.read,message.write
+            redirectUri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            scope: message.read,message.write
+          client-inner-client-credentials:
+            provider: spring
+            client-id: peacetrue
+            client-secret: password
+            authorization-grant-type: client_credentials
+            scope: message.read,message.write
 
 ---
 

@@ -11,6 +11,7 @@ spring:
 ---
 # default，默认环境
 spring.profiles: default
+
 spring.profiles.include: native
 
 ---
@@ -33,7 +34,7 @@ spring:
     config:
       server:
         #默认分支
-        default-label: dev/1.4.0/docker
+        default-label: dev/1.5.0/spring-authorization-server
         git:
           #远程资源库地址
           uri: https://github.com/peacetrue/peacetrue-microservice-config-repo-template

@@ -30,7 +30,9 @@ public class WebFluxSecurityConfig {
                 .anyExchange().authenticated()
         )
                 .httpBasic(withDefaults())
+                .formLogin(withDefaults())
                 .oauth2Login(withDefaults())
+                .oauth2Client(withDefaults())
         ;
         return http.build();
     }

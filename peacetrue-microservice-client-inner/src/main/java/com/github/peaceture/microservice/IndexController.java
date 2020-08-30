@@ -19,14 +19,14 @@ import java.util.Map;
 @RestController
 public class IndexController {
 
-    @GetMapping("/")
-    public Object index(@RegisteredOAuth2AuthorizedClient OAuth2AuthorizedClient authorizedClient,
-                        @AuthenticationPrincipal OAuth2User oauth2User) {
-        Map<String, Object> result = new HashMap<>(2);
-        result.put("authorizedClient", authorizedClient);
-        result.put("oauth2User", oauth2User);
-        return result;
-    }
+//    @GetMapping("/")
+//    public Object index(@RegisteredOAuth2AuthorizedClient("client-inner-authorization-code") OAuth2AuthorizedClient authorizedClient,
+//                        @AuthenticationPrincipal OAuth2User oauth2User) {
+//        Map<String, Object> result = new HashMap<>(2);
+//        result.put("authorizedClient", authorizedClient);
+//        result.put("oauth2User", oauth2User);
+//        return result;
+//    }
 
     @Autowired
     private WebClient webClient;
