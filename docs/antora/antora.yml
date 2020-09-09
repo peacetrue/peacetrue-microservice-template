@@ -1,6 +1,6 @@
 name: peacetrue-microservice-template
 title: 安宁微服务
-version: local(_)latest
+version: dev(_)1.4.0(_)docker
 asciidoc:
   attributes:
     numbered: ''

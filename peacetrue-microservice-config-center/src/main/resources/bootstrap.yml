@@ -32,8 +32,8 @@ spring:
   cloud:
     config:
       server:
-        #默认分支，此处不需要转译，客户端需要转译成 local(_)latest
-        default-label: local/latest
+        #默认分支
+        default-label: dev/1.4.0/docker
         git:
           #远程资源库地址
           uri: https://github.com/peacetrue/peacetrue-microservice-config-repo-template

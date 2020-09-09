@@ -1,4 +1,4 @@
-version: '2'
+version: '2.4'
 
 networks:
   peacetrue-microservice:
@@ -9,100 +9,190 @@ services:
   peacetrue-microservice-config-center:
     container_name: peacetrue-microservice-config-center
     hostname: peacetrue-microservice-config-center
-#    build: peacetrue-microservice-config-center
-    image: peacetrueopenjdk:latest
-    restart: always
+    image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-config-center:latest
+    #restart: always
     privileged: true
+    env_file:
+      - .env.${ENV}
     volumes:
-      - ../peacetrue-microservice-config-center/build/libs/peacetrue-microservice-config-center-1.0.0-SNAPSHOT.jar:/app.jar
-      - ./peacetrue-microservice-config-center/logs:/logs
-      - ${volumes_ssl}
-      - ${volumes_localtime}
-      - ${volumes_timezone}
-    expose:
-      - 8888
+      - ./peacetrue-microservice-config-center/logs:/app/logs
+      #- ${volumes_ssl}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
     ports:
       - "8888:8888"
-    env_file:
-      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     networks:
       - peacetrue-microservice
-    entrypoint: java -jar app.jar ${JAR_ENV}
+    #entrypoint: java -jar app.jar ${JAR_ENV}
   peacetrue-microservice-registry-center:
     container_name: peacetrue-microservice-registry-center
     hostname: peacetrue-microservice-registry-center
-#    build: peacetrue-microservice-registry-center
-    image: peacetrueopenjdk:latest
-    restart: always
+    #build: peacetrue-microservice-registry-center
+    image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-registry-center:latest
+    #restart: always
     privileged: true
+    env_file:
+      - .env.${ENV}
     volumes:
-      - ../peacetrue-microservice-registry-center/build/libs/peacetrue-microservice-registry-center-1.0.0-SNAPSHOT.jar:/app.jar
-      - ./peacetrue-microservice-registry-center/logs:/logs
-      - ${volumes_ssl}
-      - ${volumes_localtime}
-      - ${volumes_timezone}
-    expose:
-      - 8761
+      #      - ../peacetrue-microservice-registry-center/build/libs/peacetrue-microservice-registry-center-1.0.0-SNAPSHOT.jar:/app.jar
+      - ./peacetrue-microservice-registry-center/logs:/app/logs
+      #- ${volumes_ssl}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
     ports:
       - "8761:8761"
-    env_file:
-      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     networks:
       - peacetrue-microservice
-    entrypoint: java -jar app.jar ${JAR_ENV}
+    #entrypoint: java -jar app.jar ${JAR_ENV}
     depends_on:
-      - peacetrue-microservice-config-center
-  peacetrue-microservice-gateway:
-    container_name: peacetrue-microservice-gateway
-    hostname: peacetrue-microservice-gateway
-#    build: peacetrue-microservice-gateway
-    image: peacetrueopenjdk:latest
-    restart: always
+      peacetrue-microservice-config-center:
+        condition: service_healthy
+  peacetrue-microservice-admin-server:
+    container_name: peacetrue-microservice-admin-server
+    hostname: peacetrue-microservice-admin-server
+    #    build: peacetrue-microservice-admin-server
+    image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-admin-server:latest
+    #restart: always
     privileged: true
     volumes:
-      - ../peacetrue-microservice-gateway/build/libs/peacetrue-microservice-gateway-1.0.0-SNAPSHOT.jar:/app.jar
-      - ./peacetrue-microservice-gateway/logs:/logs
-      - ${volumes_ssl}
-      - ${volumes_localtime}
-      - ${volumes_timezone}
-    expose:
-      - 8500
+      #      - ../peacetrue-microservice-admin-server/build/libs/peacetrue-microservice-admin-server-1.0.0-SNAPSHOT.jar:/app.jar
+      - ./peacetrue-microservice-admin-server/logs:/app/logs
+      #- ${volumes_ssl}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
+    #    expose:
+    #      - 8500
     ports:
       - "8500:8500"
     env_file:
-      - .env
+      - .env.${ENV}
     networks:
       - peacetrue-microservice
-    entrypoint: java -jar app.jar ${JAR_ENV}
+    #entrypoint: java -jar app.jar ${JAR_ENV}
     depends_on:
-      - peacetrue-microservice-config-center
-      - peacetrue-microservice-registry-center
-  peacetrue-microservice-authorization-server:
-    container_name: peacetrue-microservice-authorization-server
-    hostname: peacetrue-microservice-authorization-server
-#    build: peacetrue-microservice-authorization-server
-    image: peacetrueopenjdk:latest
-    restart: always
+      peacetrue-microservice-registry-center:
+        condition: service_healthy
+  peacetrue-microservice-gateway:
+    container_name: peacetrue-microservice-gateway
+    hostname: peacetrue-microservice-gateway
+    #    build: peacetrue-microservice-gateway
+    image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-gateway:latest
+    #restart: always
     privileged: true
     volumes:
-      - ../peacetrue-microservice-authorization-server/build/libs/peacetrue-microservice-authorization-server-1.0.0-SNAPSHOT.jar:/app.jar
-      - ./peacetrue-microservice-authorization-server/logs:/logs
-      - ${volumes_ssl}
-      - ${volumes_localtime}
-      - ${volumes_timezone}
-    expose:
-      - 8510
+      #      - ../peacetrue-microservice-gateway/build/libs/peacetrue-microservice-gateway-1.0.0-SNAPSHOT.jar:/app.jar
+      - ./peacetrue-microservice-gateway/logs:/app/logs
+      #- ${volumes_ssl}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
+    #    expose:
+    #      - 80
     ports:
-      - "8510:8510"
+      - "80:80"
     env_file:
-      - .env
+      - .env.${ENV}
     networks:
       - peacetrue-microservice
-    entrypoint: java -jar app.jar ${JAR_ENV}
+    #entrypoint: java -jar app.jar ${JAR_ENV}
     depends_on:
-      - peacetrue-microservice-config-center
-      - peacetrue-microservice-registry-center
+      peacetrue-microservice-registry-center:
+        condition: service_healthy
+  peacetrue-microservice-resource-server:
+    container_name: peacetrue-microservice-resource-server
+    hostname: peacetrue-microservice-resource-server
+    #    build: peacetrue-microservice-resource-server
+    image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-resource-server:latest
+    #restart: always
+    privileged: true
+    volumes:
+      #      - ../peacetrue-microservice-resource-server/build/libs/peacetrue-microservice-resource-server-1.0.0-SNAPSHOT.jar:/app.jar
+      - ./peacetrue-microservice-resource-server/logs:/app/logs
+      #- ${volumes_ssl}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
+    #    expose:
+    #      - 8520
+    ports:
+      - "8520:8520"
+    env_file:
+      - .env.${ENV}
+    networks:
+      - peacetrue-microservice
+    #entrypoint: java -jar app.jar ${JAR_ENV}
+    depends_on:
+      peacetrue-microservice-registry-center:
+        condition: service_healthy
+  peacetrue-microservice-client-inner:
+    container_name: peacetrue-microservice-client-inner
+    hostname: peacetrue-microservice-client-inner
+    #    build: peacetrue-microservice-client-inner
+    image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-client-inner:latest
+    #restart: always
+    privileged: true
+    volumes:
+      #      - ../peacetrue-microservice-client-inner/build/libs/peacetrue-microservice-client-inner-1.0.0-SNAPSHOT.jar:/app.jar
+      - ./peacetrue-microservice-client-inner/logs:/app/logs
+      #- ${volumes_ssl}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
+    #    expose:
+    #      - 8530
+    ports:
+      - "8530:8530"
+    env_file:
+      - .env.${ENV}
+    networks:
+      - peacetrue-microservice
+    #entrypoint: java -jar app.jar ${JAR_ENV}
+    depends_on:
+      peacetrue-microservice-registry-center:
+        condition: service_healthy
+  peacetrue-microservice-client-outer:
+    container_name: peacetrue-microservice-client-outer
+    hostname: peacetrue-microservice-client-outer
+    #    build: peacetrue-microservice-client-outer
+    image: registry.cn-beijing.aliyuncs.com/peacetrue/peacetrue-microservice-client-outer:latest
+    #restart: always
+    privileged: true
+    volumes:
+      #      - ../peacetrue-microservice-client-outer/build/libs/peacetrue-microservice-client-outer-1.0.0-SNAPSHOT.jar:/app.jar
+      - ./peacetrue-microservice-client-outer/logs:/app/logs
+      #- ${volumes_ssl}
+      #- ${volumes_localtime}
+      #- ${volumes_localtime}
+    #    expose:
+    #      - 8531
+    ports:
+      - "8531:8531"
+    env_file:
+      - .env.${ENV}
+    networks:
+      - peacetrue-microservice
+    depends_on:
+      peacetrue-microservice-registry-center:
+        condition: service_healthy
+    #entrypoint: java -jar app.jar ${JAR_ENV}
+
+#本地 mac
+# docker-compose --env-file=.env-file.mac
+#生产
+# docker-compose --env-file=.env-file.prod
+
 # docker network create peacetrue-microservice
-# docker-compose up --build -d
+# docker-compose up -d
 # docker-compose down
-# docker-compose run peacetrue-microservice-authorization-server
+# docker-compose config
+# docker-compose --env-file=.env-file.mac up -d peacetrue-microservice-config-center
+# docker-compose --env-file=.env-file.prod up -d peacetrue-microservice-config-center

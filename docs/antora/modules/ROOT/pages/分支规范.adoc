@@ -1,0 +1,22 @@
+= 分支规范
+
+分支包括 dev/\*、local/*、release/* 和 master。最开始只有 master，基于 master 检出分支 *dev/latest* 和 *local/latest*。*dev/latest*、*local/latest*、 master、release/* 只允许从其他分支合并，不允许直接修改提交。
+
+* 非 release 分支规则为：*类型*/*版号*/*简称*，例如： local/1.3.0/spring-boot-admin
+* release 分支规则为：v *版号*，例如：v1.3.0
+
+== dev
+
+开发时基于 *dev/latest* 检出新分支 *dev/x.x.x/xxx*。开发完成后，合并分支 *dev/x.x.x/xxx* 到 *dev/latest* 进行测试。
+
+== local
+
+local 分支基于 dev 分支，添加自定义内容。操作流程类似 dev 分支。dev 测试完成后，基于 *local/latest* 检出新分支 *local/x.x.x/xxx*，然后合并 *dev/latest* 到 *local/x.x.x/xxx*，开发完成后，合并 *local/x.x.x/xxx* 到 *local/latest* 测试。
+
+== master
+
+*local/latest* 测试完成后，合并 *dev/latest* 到 master。
+
+== release
+
+从 master 检出对应的版本分支后提交。

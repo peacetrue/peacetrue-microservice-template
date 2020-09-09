@@ -4,13 +4,13 @@ spring:
   cloud:
     config:
       uri: ${MICROSERVICE_PROTOCOL:http}://${MICROSERVICE_SECURITY_USERNAME:peacetrue}:${MICROSERVICE_SECURITY_PASSWORD:password}@${MICROSERVICE_CONFIG_HOST:localhost}:${MICROSERVICE_CONFIG_PORT:8888}
-      label: local(_)latest
+#      label: local(_)1.4.0(_)docker
       fail-fast: true
 
 ---
 
 spring.profiles: prod
-spring.profiles.include: https
+#spring.profiles.include: https
 
 MICROSERVICE_CONFIG_HOST: peacetrue.cn
 

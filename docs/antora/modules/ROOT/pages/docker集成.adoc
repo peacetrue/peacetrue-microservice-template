@@ -1,0 +1,97 @@
+= Docker 集成
+
+本文简单介绍如何将项目打包成 Docker 镜像。
+
+== 打包工具
+
+=== Spring Boot Plugin
+
+基于 Spring Boot Plugin，参考 https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/#build-image[Packaging OCI Images^]。
+
+[source%nowrap,gradle]
+----
+//需要插件版本 2.3 及以上
+plugins {
+	id 'org.springframework.boot' version '2.3.2.RELEASE'
+}
+----
+
+打包命令：
+
+[source%nowrap,shell]
+----
+$ ./gradlew bootBuildImage
+----
+
+=== JIB
+
+https://github.com/GoogleContainerTools/jib[JIB] 是 Google 的容器化工具。相比于 Spring，功能更完善。项目构建采用 JIB。
+
+== 构建镜像
+
+配置 JIB：
+
+.build.gradle
+[source%nowrap,gradle]
+----
+jib {
+    from {
+        //使用本地镜像，依赖本地 Docker Daemon
+        image = "Docker://openjdk:11.0.8-jre"
+        //使用仓库镜像，速度慢
+        //image = "registry://Docker.io/library/openjdk:11.0.8-jre"
+    }
+
+    to {
+        //上传到阿里云镜像仓库
+        image = "registry.cn-beijing.aliyuncs.com/peacetrue/$name"
+        //image = "registry-vpc.cn-beijing.aliyuncs.com/peacetrue/$name"
+        tags = [/*version,*/ 'latest']
+        auth {
+            username = "peacetrue"
+            password = "xxxxxxxx"
+        }
+    }
+
+    container {
+        jvmFlags = ['-Xmx256m', '-Xms128m', '-Xmn96m', '-Xss256k']
+        creationTime = 'USE_CURRENT_TIMESTAMP'
+    }
+}
+----
+
+[source%nowrap,shell]
+----
+# 构建 Docker 镜像并安装在本地 Docker 上，需要本地存在 Docker Daemon
+$ ./gradlew jibDockerBuild
+
+# 构建 Docker 镜像并安装在远程 Docker registry，不需要本地存在 Docker Daemon
+$ ./gradlew jib
+
+# 构建 Docker 镜像输出 tar 文件，不需要本地存在运行中的 Docker Daemon
+$ ./gradlew jibBuildTar
+----
+
+== 运行镜像
+
+使用 `docker-compose` 启动镜像，参考项目目录 *peacetrue-microservice-docker*。
+
+如何使用 docker-compose 运行不同环境的配置？需要使用 `--env-file` 参数，`--env-file` 参数指定的配置，可以在 `docker-compose.yml` 中作为占位符变量使用。
+
+[source%nowrap,java]
+----
+//启动生产环境
+docker-compose --env-file=.env-file.prod up -d peacetrue-microservice-config-center
+//启动本地环境（MAC）
+docker-compose --env-file=.env-file.mac up -d peacetrue-microservice-config-center
+----
+
+== 注意
+
+=== 关于 MAC 环境
+
+在 MAC 环境下，Docker 内的容器可以通过域名访问外部系统，但域名不能指向 Docker 本机。如果访问本机，地址需要配置成 `host.docker.internal`，详情参考 https://docs.docker.com/docker-for-mac/networking/[docker-for-mac^]。
+
+=== docker-compose.yml 版本
+
+不同的版本支持的语法不同，需要留意。

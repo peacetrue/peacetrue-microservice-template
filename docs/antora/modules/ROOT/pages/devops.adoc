@@ -1,0 +1,44 @@
+= devops 实践
+
+https://dbaplus.cn/news-134-2068-1.html
+
+== 原理
+
+每次提交在本地，不处理；push 到远程后同步部署
+
+* 需求、功能开发、Bug 修复：Jira
+* 代码仓库：git、svn、gitlib、github
+* 打包部署：接收代码提交通知，构建部署。Jenkins
+* 单元测试、功能测试、集成测试：
+
+.版本流程
+. 从 dev 检出 feature/功能1，开发
+. 从 dev 检出 feature/功能2，开发
+. 提交 feature/功能1，合并到 dev，测试。检出后初次合并不涉及代码冲突
+. 将 dev 合并到 feature/功能2，解决冲突。检出后，修改了 dev ，必须将 dev 合并到 feature/功能2
+. 提交 feature/功能2，合并到 dev，测试。如果没有上一步，禁止合并
+
+== JFrog Artifactory
+
+参考
+
+* https://www.jfrog.com/confluence/display/JFROG/Installing+Artifactory[安装^]
+* https://jfrog.com/open-source[下载^]
+* https://www.jfrog.com/confluence/display/JFROG/Installing+Artifactory#InstallingArtifactory-Mac(Darwin)Installation[mac 安装^]
+
+== gitlib
+
+https://docs.gitlab.com/omnibus/docker/README.html#install-gitlab-using-docker-engine
+
+== Jenkins
+
+. 配置项目的部署服务器
+. 配置项目的部署脚本
+. SSH 登陆部署服务器，执行部署脚本
+. 监控项目的运行状态
+. 推送部署成功通知
+
+参考：
+
+* https://www.jenkins.io/doc
+* https://www.jenkins.io/zh/

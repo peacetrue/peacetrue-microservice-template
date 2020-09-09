@@ -10,4 +10,5 @@
 * xref:Admin集成.adoc[Admin集成]
 * xref:版本说明.adoc[版本说明]
 * xref:内存调优.adoc[内存调优]
+* xref:分支规范.adoc[分支规范]
 * xref:常见问题.adoc[常见问题]
