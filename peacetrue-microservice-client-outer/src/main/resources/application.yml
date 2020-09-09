@@ -11,17 +11,26 @@ spring:
   security:
     oauth2:
       client:
+        provider:
+          spring:
+            #            issuerUri: ${authorization-server.issuerUri}
+            jwkSetUri: ${authorization-server.jwkSetUri}
+            authorization-uri: ${authorization-server.issuerUri}/oauth2/authorize
+            token-uri: ${authorization-server.issuerUri}/oauth2/token
         registration:
-          peacetrue:
-            provider: peacetrue
+          client-outter-authorization-code:
+            provider: spring
             client-id: peacetrue
             client-secret: password
+            authorization-grant-type: authorization_code
+            redirectUri: '{baseUrl}/login/oauth2/code/{registrationId}'
             scope: message.read,message.write
-            authorizationGrantType: client_credentials
-        provider:
-          peacetrue:
-            issuerUri: ${authorization-server.issuerUri}
-            jwkSetUri: ${authorization-server.jwkSetUri}
+          client-outter-client-credentials:
+            provider: spring
+            client-id: peacetrue
+            client-secret: password
+            authorization-grant-type: client_credentials
+            scope: message.read,message.write
     user:
       name: ${MICROSERVICE_SECURITY_USERNAME:peacetrue}
       password: ${MICROSERVICE_SECURITY_PASSWORD:password}
@@ -32,7 +41,7 @@ gateway:
   hostname: localhost
   url: ${MICROSERVICE_PROTOCOL:http}://${gateway.hostname}
 
-spring.profiles.include: uaa,rabbitmq
+#spring.profiles.include: uaa,rabbitmq
 management.endpoints.web.exposure.include: "*"
 # 默认禁用 zipkin
 spring.zipkin.enabled: false

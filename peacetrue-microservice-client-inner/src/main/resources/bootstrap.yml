@@ -5,29 +5,6 @@ spring:
     config:
       uri: ${MICROSERVICE_PROTOCOL:http}://${MICROSERVICE_SECURITY_USERNAME:peacetrue}:${MICROSERVICE_SECURITY_PASSWORD:password}@${MICROSERVICE_CONFIG_HOST:localhost}:${MICROSERVICE_CONFIG_PORT:8888}
       fail-fast: true
-  security:
-    oauth2:
-      client:
-        provider:
-          spring:
-            #            issuerUri: ${authorization-server.issuerUri}
-            jwkSetUri: ${authorization-server.jwkSetUri}
-            authorization-uri: ${authorization-server.issuerUri}/oauth2/authorize
-            token-uri: ${authorization-server.issuerUri}/oauth2/token
-        registration:
-          client-inner-authorization-code:
-            provider: spring
-            client-id: peacetrue
-            client-secret: password
-            authorization-grant-type: authorization_code
-            redirectUri: '{baseUrl}/login/oauth2/code/{registrationId}'
-            scope: message.read,message.write
-          client-inner-client-credentials:
-            provider: spring
-            client-id: peacetrue
-            client-secret: password
-            authorization-grant-type: client_credentials
-            scope: message.read,message.write
 
 ---
 
