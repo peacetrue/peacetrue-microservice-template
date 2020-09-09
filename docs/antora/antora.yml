@@ -1,6 +1,6 @@
 name: peacetrue-microservice-template
 title: 安宁微服务
-version: dev(_)1.4.0(_)docker
+version: dev(_)1.5.0(_)spring-authorization-server
 asciidoc:
   attributes:
     numbered: ''

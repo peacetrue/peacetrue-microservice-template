@@ -35,7 +35,7 @@ public class WebFluxClientConfig {
                                               ReactorLoadBalancerExchangeFilterFunction loadBalancer) {
         ServerOAuth2AuthorizedClientExchangeFilterFunction oauth =
                 new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
-        oauth.setDefaultClientRegistrationId("peacetrue");
+        oauth.setDefaultClientRegistrationId("client-inner-client-credentials");
         return WebClient.builder()
                 //TODO handle http and https
                 .baseUrl("//peacetrue-microservice-resource-server")
