@@ -36,7 +36,7 @@ public class WebFluxClientConfig {
                                                    @Value("${gateway.url}") String gatewayUrl) {
         ServerOAuth2AuthorizedClientExchangeFilterFunction oauth =
                 new ServerOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
-        oauth.setDefaultClientRegistrationId("peacetrue");
+        oauth.setDefaultClientRegistrationId("client-outter-client-credentials");
         oauth.setDefaultOAuth2AuthorizedClient(false);
         return webClientBuilder -> webClientBuilder
                 .baseUrl(gatewayUrl)
