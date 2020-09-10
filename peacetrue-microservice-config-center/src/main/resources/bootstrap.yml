@@ -34,7 +34,7 @@ spring:
     config:
       server:
         #默认分支
-        default-label: dev/1.5.0/spring-authorization-server
+        default-label: local/latest
         git:
           #远程资源库地址
           uri: https://github.com/peacetrue/peacetrue-microservice-config-repo-template
