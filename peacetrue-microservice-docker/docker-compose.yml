@@ -15,7 +15,7 @@ services:
     env_file:
       - .env.${ENV}
     volumes:
-      - ./peacetrue-microservice-config-center/logs:/app/logs
+      - ./peacetrue-microservice-config-center/logs:/logs
       #- ${volumes_ssl}
       #- ${volumes_localtime}
       #- ${volumes_localtime}
@@ -40,8 +40,8 @@ services:
     env_file:
       - .env.${ENV}
     volumes:
-      #      - ../peacetrue-microservice-registry-center/build/libs/peacetrue-microservice-registry-center-1.0.0-SNAPSHOT.jar:/app.jar
-      - ./peacetrue-microservice-registry-center/logs:/app/logs
+      #      - ../peacetrue-microservice-registry-center/build/libs/peacetrue-microservice-registry-center-1.0.0-SNAPSHOT.jar:.jar
+      - ./peacetrue-microservice-registry-center/logs:/logs
       #- ${volumes_ssl}
       #- ${volumes_localtime}
       #- ${volumes_localtime}
@@ -67,8 +67,8 @@ services:
     #restart: always
     privileged: true
     volumes:
-      #      - ../peacetrue-microservice-admin-server/build/libs/peacetrue-microservice-admin-server-1.0.0-SNAPSHOT.jar:/app.jar
-      - ./peacetrue-microservice-admin-server/logs:/app/logs
+      #      - ../peacetrue-microservice-admin-server/build/libs/peacetrue-microservice-admin-server-1.0.0-SNAPSHOT.jar:.jar
+      - ./peacetrue-microservice-admin-server/logs:/logs
       #- ${volumes_ssl}
       #- ${volumes_localtime}
       #- ${volumes_localtime}
@@ -92,8 +92,8 @@ services:
     #restart: always
     privileged: true
     volumes:
-      #      - ../peacetrue-microservice-gateway/build/libs/peacetrue-microservice-gateway-1.0.0-SNAPSHOT.jar:/app.jar
-      - ./peacetrue-microservice-gateway/logs:/app/logs
+      #      - ../peacetrue-microservice-gateway/build/libs/peacetrue-microservice-gateway-1.0.0-SNAPSHOT.jar:.jar
+      - ./peacetrue-microservice-gateway/logs:/logs
       #- ${volumes_ssl}
       #- ${volumes_localtime}
       #- ${volumes_localtime}
@@ -117,8 +117,8 @@ services:
     #restart: always
     privileged: true
     volumes:
-      #      - ../peacetrue-microservice-resource-server/build/libs/peacetrue-microservice-resource-server-1.0.0-SNAPSHOT.jar:/app.jar
-      - ./peacetrue-microservice-resource-server/logs:/app/logs
+      #      - ../peacetrue-microservice-resource-server/build/libs/peacetrue-microservice-resource-server-1.0.0-SNAPSHOT.jar:.jar
+      - ./peacetrue-microservice-resource-server/logs:/logs
       #- ${volumes_ssl}
       #- ${volumes_localtime}
       #- ${volumes_localtime}
@@ -142,8 +142,8 @@ services:
     #restart: always
     privileged: true
     volumes:
-      #      - ../peacetrue-microservice-client-inner/build/libs/peacetrue-microservice-client-inner-1.0.0-SNAPSHOT.jar:/app.jar
-      - ./peacetrue-microservice-client-inner/logs:/app/logs
+      #      - ../peacetrue-microservice-client-inner/build/libs/peacetrue-microservice-client-inner-1.0.0-SNAPSHOT.jar:.jar
+      - ./peacetrue-microservice-client-inner/logs:/logs
       #- ${volumes_ssl}
       #- ${volumes_localtime}
       #- ${volumes_localtime}
@@ -167,8 +167,8 @@ services:
     #restart: always
     privileged: true
     volumes:
-      #      - ../peacetrue-microservice-client-outer/build/libs/peacetrue-microservice-client-outer-1.0.0-SNAPSHOT.jar:/app.jar
-      - ./peacetrue-microservice-client-outer/logs:/app/logs
+      #      - ../peacetrue-microservice-client-outer/build/libs/peacetrue-microservice-client-outer-1.0.0-SNAPSHOT.jar:.jar
+      - ./peacetrue-microservice-client-outer/logs:/logs
       #- ${volumes_ssl}
       #- ${volumes_localtime}
       #- ${volumes_localtime}
