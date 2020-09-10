@@ -51,3 +51,6 @@ docker.sh
 peacetrue-microservice-uaa/apache-tomcat-9.0.37*
 /peacetrue-microservice-uaa/uaa.war
 peacetrue-microservice-zipkin/zipkin.jar
+/docs/antora/modules/ROOT/assets/attachments/Spring Security Reference.pdf
+/docs/antora/modules/ROOT/assets/attachments/spring-boot-reference.pdf
+/docs/antora/modules/ROOT/assets/attachments/spring-cloud.pdf
