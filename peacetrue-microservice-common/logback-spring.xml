@@ -80,12 +80,16 @@
 
     </appender>
     ​
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE"/>
+    </appender>
+
     <root level="${rootLevel}">
         <springProfile name="consoleLog">
             <appender-ref ref="CONSOLE"/>
         </springProfile>
         <springProfile name="fileLog">
-            <appender-ref ref="FILE"/>
+            <appender-ref ref="ASYNC_FILE"/>
         </springProfile>
         <springProfile name="rabbitmqLog">
             <appender-ref ref="AMQP"/>
