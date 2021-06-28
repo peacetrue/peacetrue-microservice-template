@@ -22,7 +22,7 @@
 参考 https://github.com/deviantony/docker-elk[docker-elk^]，检出到本地后，修改 Logstash 配置：
 
 .learn-docker/composes/elk/logstash/config/logstash.yml
-[source%nowrap,conf]
+[source,conf]
 ----
 #指定接收 logstash 队列中的所有消息
 input {
@@ -46,7 +46,7 @@ input {
 修改项目日志配置，输出日志到消息队列。添加 `logback-spring.xml` 配置文件，重要部分内容如下：
 
 .logback-spring.xml
-[source%nowrap,xml]
+[source,xml]
 ----
 <appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
     <encoder class="net.logstash.logback.encoder.LogstashEncoder">
@@ -103,7 +103,7 @@ image::日志收集/kibana日志信息.png[]
 首先，在项目中添加 `org.springframework.cloud:spring-cloud-starter-sleuth` 依赖。重新启动项目后，日志信息如下：
 
 .root.log
-[source%nowrap,log]
+[source,log]
 ----
 2020-07-21 08:38:51.994  INFO [peacetrue-microservice-config-center,,,] 51465 --- [nio-8888-exec-9] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2020-07-21 08:38:52.026  INFO [peacetrue-microservice-config-center,,,] 51465 --- [nio-8888-exec-9] o.s.web.servlet.DispatcherServlet        : Completed initialization in 31 ms

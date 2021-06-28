@@ -8,7 +8,7 @@
 
 基于 Spring Boot Plugin，参考 https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/#build-image[Packaging OCI Images^]。
 
-[source%nowrap,gradle]
+[source,gradle]
 ----
 //需要插件版本 2.3 及以上
 plugins {
@@ -18,7 +18,7 @@ plugins {
 
 打包命令：
 
-[source%nowrap,shell]
+[source,shell]
 ----
 $ ./gradlew bootBuildImage
 ----
@@ -32,7 +32,7 @@ https://github.com/GoogleContainerTools/jib[JIB] 是 Google 的容器化工具�
 配置 JIB：
 
 .build.gradle
-[source%nowrap,gradle]
+[source,gradle]
 ----
 jib {
     from {
@@ -60,7 +60,7 @@ jib {
 }
 ----
 
-[source%nowrap,shell]
+[source,shell]
 ----
 # 构建 Docker 镜像并安装在本地 Docker 上，需要本地存在 Docker Daemon
 $ ./gradlew jibDockerBuild
@@ -78,7 +78,7 @@ $ ./gradlew jibBuildTar
 
 如何使用 docker-compose 运行不同环境的配置？需要使用 `--env-file` 参数，`--env-file` 参数指定的配置，可以在 `docker-compose.yml` 中作为占位符变量使用。
 
-[source%nowrap,java]
+[source,java]
 ----
 //启动生产环境
 docker-compose --env-file=.env-file.prod up -d peacetrue-microservice-config-center

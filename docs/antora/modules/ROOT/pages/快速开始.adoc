@@ -8,7 +8,7 @@
 
 == 检出源码
 
-[source%nowrap,shell]
+[source,shell]
 ----
 # 检出微服务源码
 $ git clone https://github.com/peacetrue/peacetrue-microservice-template

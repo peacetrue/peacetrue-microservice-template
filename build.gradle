@@ -1,13 +1,15 @@
 buildscript {
     repositories {
-        maven { url 'https://repo.spring.io/plugins-release' }
-        maven { url 'https://plugins.gradle.org/m2/' }
+        mavenLocal()
+        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+//        maven { url 'https://plugins.gradle.org/m2/' }
+//        maven { url 'https://repo.spring.io/plugins-release' }
     }
 
     dependencies {
         //自动使用最新版本
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.6.RELEASE"
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.3.3.RELEASE"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.4.5"
         classpath "gradle.plugin.com.google.cloud.tools:jib-gradle-plugin:2.5.0"
     }
 }
@@ -19,8 +21,8 @@ subprojects { project ->
     description "微服务结构"
 
     apply plugin: "java-library"
-    sourceCompatibility = 9
-    targetCompatibility = 9
+    sourceCompatibility = 8
+    targetCompatibility = 8
 
     sourceSets {
         main {
@@ -32,9 +34,8 @@ subprojects { project ->
 
     repositories {
         mavenLocal()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        maven { url "https://repo.spring.io/plugins-release" }
-        mavenCentral()
+        maven { url "https://maven.aliyun.com/repository/public" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 
     apply plugin: 'org.springframework.boot'
@@ -42,7 +43,6 @@ subprojects { project ->
     apply plugin: "com.google.cloud.tools.jib"
     dependencyManagement {
         imports {
-            //自动使用最新版本
             mavenBom "com.github.peacetrue:peacetrue-dependencies:2.0.0-SNAPSHOT"
         }
         dependencies {

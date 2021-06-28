@@ -10,7 +10,7 @@ UAA 需要运行在 jdk 11+ 版本上。
 
 点击 https://downloads.apache.org/tomcat/tomcat-9/v9.0.37/bin/apache-tomcat-9.0.37.zip[apache-tomcat-9.0.37.zip^] 下载 Tomcat。解压后修改脚本执行权限：
 
-[source%nowrap,shell]
+[source,shell]
 ----
 $ cd apache-tomcat-9.0.37/bin
 $ chmod +x *.sh
@@ -24,7 +24,7 @@ $ chmod +x *.sh
 
 打开 *peacetrue-microservice-template/peacetrue-microservice-uaa/uaa.yml*，修改 MYSQL 数据库连接配置：
 
-[source%nowrap,yml]
+[source,yml]
 ----
 database:
   driverClassName: org.mariadb.jdbc.Driver
@@ -35,7 +35,7 @@ database:
 
 == 启动服务
 
-[source%nowrap,shell]
+[source,shell]
 ----
 
 # 先设置 uaa 配置文件的位置：
@@ -52,7 +52,7 @@ UAA 启动后，会自动创建表结构并初始化部分数据，但不包括�
 
 如无需支持 https，可忽略此步骤。打开 apache-tomcat-9.0.37/conf/server.xml，启用以下配置：
 
-[source%nowrap,xml]
+[source,xml]
 ----
 <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"
            maxThreads="150" SSLEnabled="true">

@@ -60,7 +60,7 @@ docker 目前尚未实现，以下配置未实现 docker。
 配置中心只有项目内配置。
 
 .项目内配置
-[source%nowrap,yml]
+[source,yml]
 ----
 spring:
   application:
@@ -135,7 +135,7 @@ logging.file.name: logs/root.log
 不同的应用，项目内配置除了应用名不同，其他都相同，因为它们都连接到同一个配置中心。
 
 .项目内配置
-[source%nowrap,yml]
+[source,yml]
 ----
 spring:
   application:

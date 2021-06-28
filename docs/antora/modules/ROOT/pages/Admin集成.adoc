@@ -20,7 +20,7 @@ image::admin集成/默认的登陆页面.png[]
 参考 https://codecentric.github.io/spring-boot-admin/current/#_securing_spring_boot_admin_server[SBA官方文档^] 实现的 Reactive 版本：
 
 .WebFluxSecurityConfig
-[source%nowrap,java]
+[source,java]
 ----
 @Bean
 public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http,

@@ -35,7 +35,7 @@ image::日志收集详解/kibana日志对象.png[]
 `AmqpAppender` 会使用一些默认值，合适的默认值不会修改直接延用：
 
 .logback-spring.xml
-[source%nowrap,xml]
+[source,xml]
 ----
 <springProperty scope="context" name="appId" source="spring.application.name"/>
 <appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">
@@ -106,7 +106,7 @@ NOTE: RabbitMQ 中消息包含属性部分和负载部分，与 Logstash 集成�
 
 追踪信息同时也会出现在负载中：
 
-[source%nowrap,json]
+[source,json]
 ----
 {
   "@timestamp": "2020-07-22T19:25:44.345+08:00",
@@ -134,7 +134,7 @@ logstash.conf 的详细配置参考 https://www.elastic.co/guide/en/logstash/cur
 Logstash 会使用一些默认值，合适的默认值不会修改直接延用：
 
 .logstash.conf
-[source%nowrap,json]
+[source,json]
 ----
 input {
     rabbitmq {
@@ -168,7 +168,7 @@ Logstash 默认不会读取消息的属性信息，这会加重负载。与之�
 
 从 Kibana 查看展示的日志详细数据：
 
-[source%nowrap,json]
+[source,json]
 ----
 {
   "_index": "logstash-2020.07.22-000001",

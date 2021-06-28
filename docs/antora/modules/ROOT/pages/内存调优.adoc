@@ -15,7 +15,7 @@ image::内存调优/服务器配置.png[]
 
 首先，要找出为什么应用自己就挂了。查看系统日志：
 
-[source%nowrap,shell]
+[source,shell]
 ----
 # 在系统日志中搜索 java
 $ tail -1000f /var/log/messages | grep "java"
