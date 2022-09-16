@@ -8,12 +8,12 @@ spring:
 
 ---
 
-spring.profiles: prod
+spring.config.activate.on-profile: prod
 
 MICROSERVICE_CONFIG_HOST: peacetrue.cn
 
 ---
 
-spring.profiles: https
+spring.config.activate.on-profile: https
 
 MICROSERVICE_PROTOCOL: https

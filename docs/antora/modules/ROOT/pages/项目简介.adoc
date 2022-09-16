@@ -80,7 +80,7 @@ logging.level.com.github.peacetrue: debug
 
 ---
 #默认环境，开发环境
-spring.profiles: default
+spring.config.activate.on-profile: default
 #使用本地文件需要包含 native
 spring.profiles.include: native
 spring:
@@ -93,7 +93,7 @@ spring:
 
 ---
 #生产环境
-spring.profiles: prod
+spring.config.activate.on-profile: prod
 #默认激活 https 和 log
 spring.profiles.include: https,log
 
@@ -113,7 +113,7 @@ logging.level.com.github.peacetrue: info
 
 ---
 #默认 http 协议，激活此配置切换到 https 协议
-spring.profiles: https
+spring.config.activate.on-profile: https
 
 server:
   ssl:
@@ -123,7 +123,7 @@ server:
 
 ---
 #默认输出到控制台，激活此配置切换到文件
-spring.profiles: log
+spring.config.activate.on-profile: log
 
 logging.file.name: logs/root.log
 ----
@@ -150,14 +150,14 @@ spring:
 
 ---
 #生产环境
-spring.profiles: prod
+spring.config.activate.on-profile: prod
 spring.profiles.include: https
 
 MICROSERVICE_CONFIG_HOST: peacetrue.cn
 
 ---
 #默认 http 协议，激活此配置切换到 https 协议
-spring.profiles: https
+spring.config.activate.on-profile: https
 
 MICROSERVICE_PROTOCOL: https
 ----

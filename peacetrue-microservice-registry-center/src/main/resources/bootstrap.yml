@@ -10,13 +10,13 @@ spring:
 
 ---
 #生产环境
-spring.profiles: prod
+spring.config.activate.on-profile: prod
 #spring.profiles.include: https
 
 MICROSERVICE_CONFIG_HOST: peacetrue.cn
 
 ---
 #默认 http 协议，激活此配置切换到 https 协议
-spring.profiles: https
+spring.config.activate.on-profile: https
 
 MICROSERVICE_PROTOCOL: https

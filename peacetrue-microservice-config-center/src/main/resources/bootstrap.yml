@@ -13,7 +13,7 @@ spring:
 
 ---
 #native：Spring 预定义的环境，使用本地文件需要包含 native
-spring.profiles: native
+spring.config.activate.on-profile: native
 spring:
   cloud:
     config:
@@ -24,7 +24,7 @@ spring:
 
 ---
 #生产环境
-spring.profiles: prod
+spring.config.activate.on-profile: prod
 
 spring:
   cloud:
