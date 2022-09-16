@@ -34,6 +34,10 @@ spring:
     user:
       name: ${MICROSERVICE_SECURITY_USERNAME:peacetrue}
       password: ${MICROSERVICE_SECURITY_PASSWORD:password}
+  profiles:
+    group:
+      default: consoleLog
+      prod: fileLog,rabbitmqLog,cmd,zipkin
 
 server.port: 8531
 
@@ -53,13 +57,13 @@ logging.level.root: DEBUG
 ---
 #默认环境
 spring.profiles: default
-spring.profiles.include: consoleLog
+#spring.profiles.include: consoleLog
 
 ---
 
 spring.profiles: prod
 #spring.profiles.include: https,fileLog,rabbitmqLog,cmd,zipkin
-spring.profiles.include: fileLog,rabbitmqLog,cmd,zipkin
+#spring.profiles.include: fileLog,rabbitmqLog,cmd,zipkin
 
 gateway.hostname: peacetrue.cn
 authorization-server.hostname: peacetrue.cn

@@ -7,12 +7,9 @@ spring:
       server:
         #配置中心允许读取环境仓库的配置
         bootstrap: true
-
----
-# default，默认环境
-spring.profiles: default
-
-spring.profiles.include: native
+  profiles:
+    group:
+      default: native
 
 ---
 #native：Spring 预定义的环境，使用本地文件需要包含 native
