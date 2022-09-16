@@ -9,7 +9,7 @@ dependencies {
     //消息追踪
     implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
     implementation 'net.logstash.logback:logstash-logback-encoder'
-    implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
+    // implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
     //安全
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
