@@ -13,7 +13,7 @@
     <property name="amqpPort" value="5672"/>
     <property name="amqpUsername" value="guest"/>
     <property name="amqpPassword" value="guest"/>
-    ​
+
     <!--生产环境值-->
     <springProfile name="prod">
         <property name="rootLevel" value="info"/>
@@ -79,7 +79,7 @@
         <addMdcAsHeaders>true</addMdcAsHeaders>
 
     </appender>
-    ​
+
     <root level="${rootLevel}">
         <springProfile name="consoleLog">
             <appender-ref ref="CONSOLE"/>
