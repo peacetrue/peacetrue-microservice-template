@@ -1,15 +1,16 @@
 spring:
   application:
     #应用名
-    name: peacetrue-microservice-config-center
+    name: ${name}
   cloud:
     config:
       server:
         #配置中心允许读取环境仓库的配置
         bootstrap: true
   profiles:
+    default: dev
     group:
-      default: native
+      dev: native,disable_security
 
 ---
 #native：Spring 预定义的环境，使用本地文件需要包含 native
@@ -20,7 +21,7 @@ spring:
       server:
         native:
           #直接使用本地文件，避免检出 github 仓库，相对于 java 命令执行的路径。相对路径 file:../peacetrue-microservice-config-repo-template 不支持
-          searchLocations: file:/Users/xiayx/Documents/Projects/peacetrue-microservice-config-repo-template
+          searchLocations: file:\${workingDir}/peacetrue-microservice-config-repo-template
 
 ---
 #生产环境
@@ -36,6 +37,6 @@ spring:
           #远程资源库地址
           uri: https://github.com/peacetrue/peacetrue-microservice-config-repo-template
           #如果是私有仓库需要提供用户名和密码
-          username: '${MICROSERVICE_REPO_USERNAME:peacetrue}'
-          password: '${MICROSERVICE_REPO_PASSWORD:password}'
+          username: \${MICROSERVICE_REPO_USERNAME:peacetrue}
+          password: \${MICROSERVICE_REPO_PASSWORD:password}
 

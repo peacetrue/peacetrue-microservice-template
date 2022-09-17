@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: ${name}
+  profiles:
+    default: dev
+    group:
+      dev: disable_security
+  cloud:
+    config:
+      uri: \${MICROSERVICE_PROTOCOL:http}://\${MICROSERVICE_SECURITY_USERNAME:peacetrue}:\${MICROSERVICE_SECURITY_PASSWORD:password}@\${MICROSERVICE_CONFIG_HOST:localhost}:\${MICROSERVICE_CONFIG_PORT:8888}
+      #label: dev(_)latest
+      fail-fast: true
+
+---
+spring.config.activate.on-profile: prod
+#spring.profiles.include: https
+
+MICROSERVICE_CONFIG_HOST: peacetrue.cn
+
+---
+spring.config.activate.on-profile: https
+
+MICROSERVICE_PROTOCOL: https
+
+
